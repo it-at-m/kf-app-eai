@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "de.muenchen.rbs.kitafindereai.api"})
+@ComponentScan(basePackages = { "de.muenchen.rbs.kitafindereai.api", "de.muenchen.rbs.kitafindereai.config"})
 public class KitaFinderEaiApplication implements CommandLineRunner {
 	
 	@Override
