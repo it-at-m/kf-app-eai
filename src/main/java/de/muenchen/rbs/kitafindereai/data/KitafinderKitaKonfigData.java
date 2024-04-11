@@ -4,6 +4,7 @@
  */
 package de.muenchen.rbs.kitafindereai.data;
 
+import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,7 +13,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * 
+ * In der EAI gespeicherte Daten zu einer Einrichtung ({@link Institute})
  */
 @Entity
 @Data

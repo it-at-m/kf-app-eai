@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * 
+ * DTO für {@link KitafinderKitaKonfigData}
  */
 @Data
 public class KitafinderKitaKonfigDataDto {

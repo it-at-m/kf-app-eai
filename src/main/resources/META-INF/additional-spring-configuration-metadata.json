@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "app.password-encoder.encryptor.password",
+    "type": "java.lang.String",
+    "description": "Passwort für die Erstellung eines TextEncryptors."
+  },
+  {
+    "name": "app.password-encoder.encryptor.salt",
+    "type": "java.lang.String",
+    "description": "Salt für die Erstellung eines TextEncryptors.Passwort für die Erstellung eines TextEncryptors."
+  }
+]}

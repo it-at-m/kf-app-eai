@@ -1,35 +1,22 @@
-## Customize this file after creating the new REPO and remove this lines.
-What to adjust:  
-* Add the your project or repo name direct under the logo.
-* Add a short and long desciption.
-* Add links for your final repo to report a bug or request a feature.
-* Add list of used technologies.
-* If you have, add a roadmap or remove this section.
-* Fill up the section for set up and documentation.
- * Start in this file only with documentation and link to the docs folder.
-* Add project shields. Use [shields.io](https://shields.io/)
+# Kitafinder-KitaApp-EAI
 
-## ------- end to remove -------
-<!-- add Project Logo, if existing -->
-
-# repo or project name
-
-*Add a description from your project here.*
-
+*Dieses Enterprise Application Interface bietet eine Schnittstelle für die Kita-App an, über die Daten vom Kitafinder abgefragt werden können.*
 
 ### Built With
 
-The documentation project is built with technologies we use in our projects:
+This project is built with the following technologies:
 
-* *write here the list of used technologies*
+* Java
+* Spring Boot
+* Maven
 
 ## Roadmap
 
-*if you have a ROADMAP for your project add this here*
+![Under construction](https://www.pngplay.com/wp-content/uploads/6/Under-Construction-Icon-PNG.png)
 
+*This project is currently being developed.*
 
 See the [open issues](#) for a full list of proposed features (and known issues).
-
 
 ## Set up
 *how can i start and fly this project*
@@ -53,11 +40,9 @@ Don't forget to give the project a star! Thanks again!
 
 More about this in the [CODE_OF_CONDUCT](/CODE_OF_CONDUCT.md) file.
 
-
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) file for more information.
-
 
 ## Contact
 
