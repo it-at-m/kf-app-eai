@@ -1,9 +1,29 @@
-spring.application.name=kita-finder-eai
+spring:
+  application:
+    name: kita-finder-eai
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://ssodev.muenchen.de/auth/realms/A23
+          
 # swagger-ui custom path
-springdoc.swagger-ui.path=/swagger-ui.html
-springdoc.default-produces-media-type=application/json
-server.port=8080
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    oauth:
+      clientId: instikom-kf-schnittstelle
+      # clientSecret: set in config
+      realm: A23
+      appName: kita-finder-eai
+  default-produces-media-type: application/json
+server:
+  port: 8080
 
+app:
 # Encryption properties. Overwrite in non-dev-environments!
-app.passwordEncoder.encryptor.password=377b88361dd70f30689cecf46e73e36d
-app.passwordEncoder.encryptor.salt=2c82deb3e67b0da1
+  token-url: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/token
+  passwordEncoder:
+    encryptor:
+      password: 377b88361dd70f30689cecf46e73e36d
+      salt: 2c82deb3e67b0da1

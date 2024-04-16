@@ -8,5 +8,10 @@
     "name": "app.password-encoder.encryptor.salt",
     "type": "java.lang.String",
     "description": "Salt für die Erstellung eines TextEncryptors.Passwort für die Erstellung eines TextEncryptors."
+  },
+  {
+    "name": "app.token-url",
+    "type": "java.lang.String",
+    "description": "URL, an der die Oauth2 Tokens abgefragt werden."
   }
 ]}

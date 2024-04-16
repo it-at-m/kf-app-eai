@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,13 @@ import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@CrossOrigin
 @RestController
+@SecurityRequirement(name = "BasicAuth")
 @RequestMapping(path = "/internal/", produces = "application/json")
 public class InternalApiController {
 

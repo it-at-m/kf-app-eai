@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@CrossOrigin
 @RestController
+@SecurityRequirement(name = "OAUTH2")
 @RequestMapping(path = "/kitaApp/v1", produces = "application/json")
 public class KitaAppApiController {
 
@@ -49,6 +53,7 @@ public class KitaAppApiController {
     @GetMapping("einrichtungen/{kibigWebId}/mitGruppenUndKindern")
     public ResponseEntity<Institute> getGroupsWithKidsByKibigwebid(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId) {
+        log.info("Endpoint einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
         try {
             return new ResponseEntity<Institute>(objectMapper.readValue(
                     "{\n  \"intituteName\" : \"Lerchenkinderhaus e. V.\",\n  \"instituteId\" : 1620028207,\n  \"groups\" : []\n}",
