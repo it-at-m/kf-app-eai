@@ -10,8 +10,38 @@
     "description": "Salt für die Erstellung eines TextEncryptors.Passwort für die Erstellung eines TextEncryptors."
   },
   {
-    "name": "app.token-url",
+    "name": "app.security.sso-base-url",
+    "type": "java.lang.String",
+    "description": "Basis-URL des SSO-Servers."
+  },
+  {
+    "name": "app.security.realm",
+    "type": "java.lang.String",
+    "description": "SSO-Realm."
+  },
+  {
+    "name": "app.security.client-id",
+    "type": "java.lang.String",
+    "description": "client-id für die Authentifizierung"
+  },
+  {
+    "name": "app.security.client-secret",
+    "type": "java.lang.String",
+    "description": "client-secret für die Authentifizierung"
+  },
+  {
+    "name": "app.security.token-url",
     "type": "java.lang.String",
     "description": "URL, an der die Oauth2 Tokens abgefragt werden."
+  },
+  {
+    "name": "app.internalApi.authentication.user",
+    "type": "java.lang.String",
+    "description": "User für Basic-Auth."
+  },
+  {
+    "name": "app.internalApi.authentication.password",
+    "type": "java.lang.String",
+    "description": "Password für Basic-Auth."
   }
 ]}

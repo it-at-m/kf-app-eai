@@ -1,29 +1,42 @@
+app:
+  security:
+    sso-base-url: https://ssodev.muenchen.de
+    realm: A23
+    client-id: instikom-kf-schnittstelle
+    # app.security.client-secret: required for oauth authentication to work.
+    # Add in programm arguments or environment
+    token-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token
+  passwordEncoder:
+    # Encryption properties. Overwrite in non-dev-environments!
+    encryptor:
+      password: 377b88361dd70f30689cecf46e73e36d
+      salt: 2c82deb3e67b0da1
+  internalApi:
+    # Overwrite in non-dev-environments!
+    authentication:
+      user: internalApiUser
+      password: be7de70f405a8cdb
+      
 spring:
   application:
     name: kita-finder-eai
   security:
     oauth2:
       resourceserver:
-        jwt:
-          issuer-uri: https://ssodev.muenchen.de/auth/realms/A23
+        opaquetoken:
+          introspection-uri: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token/introspect
+          client-id: ${app.security.client-id}
+          client-secret: ${app.security.client-secret}
           
-# swagger-ui custom path
+# swagger-ui configuration
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
     oauth:
-      clientId: instikom-kf-schnittstelle
-      # clientSecret: set in config
-      realm: A23
-      appName: kita-finder-eai
+      clientId: ${app.security.client-id}
+      realm: ${app.security.realm}
+      appName: ${spring.application.name}
   default-produces-media-type: application/json
+  
 server:
   port: 8080
-
-app:
-# Encryption properties. Overwrite in non-dev-environments!
-  token-url: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/token
-  passwordEncoder:
-    encryptor:
-      password: 377b88361dd70f30689cecf46e73e36d
-      salt: 2c82deb3e67b0da1
