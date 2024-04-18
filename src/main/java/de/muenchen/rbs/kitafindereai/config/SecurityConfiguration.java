@@ -70,7 +70,7 @@ public class SecurityConfiguration {
     @Profile("!no-security")
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/actuator/info", "/actuator/health/**", "/explorer/**", "/h2-console/**",
+                .requestMatchers("/actuator/info", "/actuator/health/**", "/explorer/**",
                         "/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
                 .anyRequest().authenticated())

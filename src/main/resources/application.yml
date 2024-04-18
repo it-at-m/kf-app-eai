@@ -16,6 +16,8 @@ app:
     authentication:
       user: internalApiUser
       password: be7de70f405a8cdb
+  kitafinderAdapter:
+    baseUrl: http://kitafinder-plan-k2.muenchen.de
       
 spring:
   application:

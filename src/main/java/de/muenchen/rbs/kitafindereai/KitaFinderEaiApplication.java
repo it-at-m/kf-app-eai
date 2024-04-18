@@ -4,13 +4,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "de.muenchen.rbs.kitafindereai.api", "de.muenchen.rbs.kitafindereai.config"})
 public class KitaFinderEaiApplication implements CommandLineRunner {
-	
-	@Override
+
+    @Override
     public void run(String... arg0) throws Exception {
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
@@ -32,4 +30,3 @@ public class KitaFinderEaiApplication implements CommandLineRunner {
     }
 
 }
-

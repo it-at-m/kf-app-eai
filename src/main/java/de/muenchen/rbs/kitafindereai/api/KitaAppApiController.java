@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,6 +35,9 @@ public class KitaAppApiController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private KitaFinderService kitaFinderService;
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                     @Content(schema = @Schema(implementation = Institute.class)) }),
@@ -54,6 +58,7 @@ public class KitaAppApiController {
     public ResponseEntity<Institute> getGroupsWithKidsByKibigwebid(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId) {
         log.info("Endpoint einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
+
         try {
             return new ResponseEntity<Institute>(objectMapper.readValue(
                     "{\n  \"intituteName\" : \"Lerchenkinderhaus e. V.\",\n  \"instituteId\" : 1620028207,\n  \"groups\" : []\n}",
