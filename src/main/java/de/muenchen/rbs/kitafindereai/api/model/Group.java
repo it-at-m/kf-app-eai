@@ -1,5 +1,6 @@
 package de.muenchen.rbs.kitafindereai.api.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,6 +31,6 @@ public class Group {
     // Kitafinder-Column [VER_GRUPPE]
     private String name;
     
-    private Collection<Child> children;
+    private Collection<Child> children = new ArrayList<>();
 
 }

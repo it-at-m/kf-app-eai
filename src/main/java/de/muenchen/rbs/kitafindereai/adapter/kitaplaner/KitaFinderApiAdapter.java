@@ -42,10 +42,12 @@ public class KitaFinderApiAdapter {
     }
 
     public ResponseEntity<KitafinderExport> exportKitaData(@NotNull String traeger,
-            @NotNull String password, String kitaIdExtern) {
+            String kitaIdExtern, @NotNull String password) {
+        log.info("Requesting export from kita-planer for traeger={} and kitaIdExtern={}", traeger, kitaIdExtern);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        // Spring can by default only handle MultiValueMap with MediaType.APPLICATION_FORM_URLENCODED
         MultiValueMap<String, String> requestParameters = new LinkedMultiValueMap<>();
         requestParameters.put("csv", List.of("n"));
         requestParameters.put("benutzerId", List.of("kita-app-eai"));
@@ -57,10 +59,12 @@ public class KitaFinderApiAdapter {
 
         HttpEntity<?> httpRequest = new HttpEntity<>(requestParameters, headers);
 
+        log.debug("Starting export from kita-planer...");
         ResponseEntity<KitafinderExport> response = restTemplate.exchange(baseUrl + relativeUrl,
                 HttpMethod.POST,
                 httpRequest,
                 KitafinderExport.class);
+        log.debug("Export from kita-planer done.");
 
         return response;
     }
