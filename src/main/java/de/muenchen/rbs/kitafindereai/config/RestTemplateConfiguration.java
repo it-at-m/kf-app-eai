@@ -11,6 +11,8 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Configures the {@link RestTemplate}
+ * 
+ * @author m.zollbrecht
  */
 @Configuration
 public class RestTemplateConfiguration {

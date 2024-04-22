@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Adresse des Kindes. Wird aus der Adresse der SB1 | SB2 bzw. der abweichenden (ABW) Adresse berechnet. Berechnung abhängig von [WOHNHAFT_BEI]
+ * Adress
  */
 @Data
 @NoArgsConstructor

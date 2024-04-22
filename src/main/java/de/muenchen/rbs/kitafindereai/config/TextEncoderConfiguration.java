@@ -12,16 +12,18 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 
 /**
  * General configuration for encryption and decryption.
+ * 
+ * @author m.zollbrecht
  */
 @Configuration
 public class TextEncoderConfiguration {
 
     @Value("${app.passwordEncoder.encryptor.password}")
     private String password;
-    
+
     @Value("${app.passwordEncoder.encryptor.salt}")
     private String salt;
-    
+
     @Bean
     public TextEncryptor encryptor() {
         return Encryptors.delux(password, salt);

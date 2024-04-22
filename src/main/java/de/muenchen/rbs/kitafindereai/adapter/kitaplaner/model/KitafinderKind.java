@@ -11,7 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * A child as received from kitafinder.
  * 
+ * @author m.zollbrecht
  */
 @Data
 @NoArgsConstructor

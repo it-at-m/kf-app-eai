@@ -11,7 +11,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Wrapper of kitafinder-export data.
  * 
+ * @author m.zollbrecht
  */
 @Data
 @NoArgsConstructor

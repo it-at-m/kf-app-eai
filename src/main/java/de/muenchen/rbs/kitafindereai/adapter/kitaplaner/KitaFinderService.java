@@ -16,7 +16,10 @@ import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Service to call kitafinder using stored config data in the form of
+ * {@linkplain KitafinderKitaKonfigData}.
  * 
+ * @author m.zollbrecht
  */
 @Slf4j
 @Service

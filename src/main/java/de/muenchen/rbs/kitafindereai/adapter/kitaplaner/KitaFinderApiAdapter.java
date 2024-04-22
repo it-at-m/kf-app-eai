@@ -23,7 +23,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Adapter handling calls to kitafinder.
  * 
+ * @author m.zollbrecht
  */
 @Slf4j
 @Component

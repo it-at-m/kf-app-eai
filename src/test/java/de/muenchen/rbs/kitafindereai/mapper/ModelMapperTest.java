@@ -2,6 +2,7 @@ package de.muenchen.rbs.kitafindereai.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,11 @@ import de.muenchen.rbs.kitafindereai.api.model.Group;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import de.muenchen.rbs.kitafindereai.config.ModelMapperConfiguration;
 
+/**
+ * Tests for {@link ModelMapperConfiguration}
+ * 
+ * @author m.zollbrecht
+ */
 class ModelMapperTest {
 
     private ModelMapper mapper = new ModelMapperConfiguration().modelMapper();
@@ -24,11 +30,29 @@ class ModelMapperTest {
         KitafinderKind source = new KitafinderKind();
         source.setKIND_VORNAME("vorname Test");
         source.setKIND_NACHNAME("nachname Test");
+        source.setKIND_ID_EXTERN("id extern Test");
+        source.setKIND_GEBDATUM("28.10.2018");
+        source.setVER_VERTRAG_AB("01.09.2020");
+        source.setVER_KUENDIGUNG_ZUM("31.10.2020");
+        source.setSB1_ORT("München");
+        source.setSB1_STRASSE("Dingolfinger Str.");
+        source.setSB1_HAUSNUMMER("21a");
+        source.setSB1_POSTLEITZAHL("80559");
+        source.setSB1_VORNAME("sb1 vorname Test");
+        source.setSB1_NACHNAME("sb1 nachname Test");
+        source.setSB2_VORNAME("sb2 vorname Test");
+        source.setSB2_NACHNAME("sb2 nachname Test");
 
         Child dest = mapper.map(source, Child.class);
 
+        assertThat(dest.getChildId()).isEqualTo(source.getKIND_ID_EXTERN());
         assertThat(dest.getFirstName()).isEqualTo(source.getKIND_VORNAME());
-        assertThat(dest.getLastName()).isEqualTo(source.getKIND_NACHNAME());
+        assertThat(dest.getBirthday())
+                .isEqualTo(LocalDate.parse(source.getKIND_GEBDATUM(), ModelMapperConfiguration.DATE_FORMATTER));
+        assertThat(dest.getCareStart())
+                .isEqualTo(LocalDate.parse(source.getVER_VERTRAG_AB(), ModelMapperConfiguration.DATE_FORMATTER));
+        assertThat(dest.getCareEnd())
+                .isEqualTo(LocalDate.parse(source.getVER_KUENDIGUNG_ZUM(), ModelMapperConfiguration.DATE_FORMATTER));
     }
 
     @Test

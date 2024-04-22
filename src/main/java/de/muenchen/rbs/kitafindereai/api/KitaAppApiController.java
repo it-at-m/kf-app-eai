@@ -58,7 +58,7 @@ public class KitaAppApiController {
     @GetMapping("einrichtungen/{kibigWebId}/mitGruppenUndKindern")
     public ResponseEntity<Institute> getGroupsWithKidsByKibigwebid(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId) {
-        log.info("Endpoint einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
+        log.info("Endpoint GET einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export.getDatensaetze(), Institute.class);

@@ -36,7 +36,7 @@ public class Parent {
     // Kitafinder-Column [SB1_NACHNAME | SB2_NACHNAME | ABW_NACHNAME]
     private String lastName;
     
-    enum ParentType {
+    public enum ParentType {
         sb1, sb2, abw;
     }
 

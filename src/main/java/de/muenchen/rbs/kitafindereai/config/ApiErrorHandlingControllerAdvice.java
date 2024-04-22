@@ -18,8 +18,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 /**
- * ControllerAdvice für globales Handling von Exceptions, die z.B. von Services geworfen werden
- * können.
+ * ControllerAdvice for global handling of exceptions.
  *
  * @author m.zollbrecht
  */

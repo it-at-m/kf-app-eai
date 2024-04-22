@@ -7,7 +7,7 @@ package de.muenchen.rbs.kitafindereai.data;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- * Repository zu {@link KitafinderKitaKonfigData}.
+ * Repository for {@link KitafinderKitaKonfigData}.
  * 
  * @author m.zollbrecht
  *

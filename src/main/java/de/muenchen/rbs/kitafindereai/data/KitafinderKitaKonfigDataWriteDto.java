@@ -8,17 +8,21 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /**
- * DTO für {@link KitafinderKitaKonfigData}
+ * DTO for {@link KitafinderKitaKonfigData}
+ * 
+ * @author m.zollbrecht
  */
 @Data
-public class KitafinderKitaKonfigDataDto {
+public class KitafinderKitaKonfigDataWriteDto {
 
-    @Size(max = 255)
-    private String kibigwebId;
+    // kibigwebid is part of url in this case.
 
     @Size(max = 255)
     private String kitaIdExtern;
 
     @Size(max = 255)
     private String traeger;
+
+    @Size(max = 255)
+    private String password;
 }
