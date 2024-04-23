@@ -4,7 +4,6 @@
  */
 package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model;
 
-import jakarta.xml.bind.annotation.XmlType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@XmlType
 public class KitafinderKind {
 
     private String KIND_VORNAME;
@@ -77,5 +75,14 @@ public class KitafinderKind {
     private String VER_GRUPPE;
     private String VER_MITTAGESSEN;
     private String EXPORTDATUM;
+    // optional fields. These fields need to be activated per traeger in kita-planer.
+    private String WOHNHAFT_BEI;
+    private String ABW_VORNAME;
+    private String ABW_NACHNAME;
+    private String ABW_STRASSE;
+    private String ABW_HAUSNUMMER;
+    private String ABW_PLZ;
+    private String ABW_ORT;
+    private String ABW_LAND;
 
 }

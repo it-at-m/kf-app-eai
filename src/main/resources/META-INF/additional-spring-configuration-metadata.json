@@ -43,5 +43,10 @@
     "name": "app.internalApi.authentication.password",
     "type": "java.lang.String",
     "description": "Password für Basic-Auth."
+  },
+  {
+    "name": "app.kitafinderAdapter.base-url",
+    "type": "java.lang.String",
+    "description": "URL der Kita-Planer Umgebung, von der die Daten abgefragt werden sollen."
   }
 ]}

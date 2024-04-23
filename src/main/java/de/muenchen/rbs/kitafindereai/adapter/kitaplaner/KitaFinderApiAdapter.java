@@ -34,7 +34,7 @@ public class KitaFinderApiAdapter {
     @Value("${app.kitafinderAdapter.baseUrl}")
     private String baseUrl;
 
-    private final String relativeUrl = "/kitaplaner/api/schnittstelle/export.xml";
+    private final String relativeUrl = "/kitaplaner/api/schnittstelle/export.json";
 
     @Autowired
     private RestTemplate restTemplate;

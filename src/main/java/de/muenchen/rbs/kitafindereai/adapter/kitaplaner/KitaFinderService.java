@@ -51,8 +51,7 @@ public class KitaFinderService {
                 return response.getBody();
             } else {
                 log.error("Error in kitafinder response: " + response.getBody().getFehlermeldung());
-                throw new KitafinderException("Kitafinder call failed with kitafinder code "
-                        + response.getBody().getStatus() + " and message " + response.getBody().getFehlermeldung());
+                throw new KitafinderException("Kitafinder call failed");
             }
         } else {
             log.error("Error getting kitafinder response. Status code " + response.getStatusCode().value());
@@ -79,8 +78,8 @@ public class KitaFinderService {
      * Exception for errors when calling or interpreting kitafinder data.
      */
     public class KitafinderException extends RuntimeException {
-        private static final long serialVersionUID = 8425994162414148989L;
-
+        private static final long serialVersionUID = 1251395732301276870L;
+        
         public static String DETAILS = "Beim Aufruf des Kitafinders ist ein Fehler aufgetreten.";
 
         public KitafinderException(String message) {

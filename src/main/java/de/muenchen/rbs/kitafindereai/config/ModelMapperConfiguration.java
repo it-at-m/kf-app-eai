@@ -49,8 +49,8 @@ public class ModelMapperConfiguration {
                 return null;
             } else {
                 // get basic information
-                institute.setInstituteId(anyKind.get().getKITA_ID());
-                institute.setInstituteId(anyKind.get().getKITA_KITANAME());
+                institute.setInstituteId(anyKind.get().getKITA_ID_EXTERN());
+                institute.setIntituteName(anyKind.get().getKITA_KITANAME());
 
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
@@ -59,8 +59,9 @@ public class ModelMapperConfiguration {
                     Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findAny();
                     if (group.isEmpty()) {
                         // Group is not present yet.
-                        groups.add(new Group(null, groupName, new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
+                        groups.add(new Group(groupName, groupName, new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
                     } else {
+                        // Add to existing group
                         group.get().getChildren().add(mapper.map(kind, Child.class));
                     }
                 });
@@ -81,12 +82,27 @@ public class ModelMapperConfiguration {
             if (context == null || context.getSource() == null) {
                 return null;
             }
-            // TODO: dependent on WOHNHAFT_BEI
+            String wohnhaftBei = context.getSource().getWOHNHAFT_BEI();
+
             ChildAddress adress = new ChildAddress();
-            adress.setCity(context.getSource().getSB1_ORT());
-            adress.setStreet(context.getSource().getSB1_STRASSE());
-            adress.setStreetNo(context.getSource().getSB1_HAUSNUMMER());
-            adress.setZipCode(context.getSource().getSB1_POSTLEITZAHL());
+            if ("sb2".equals(wohnhaftBei.toLowerCase())) {
+                adress.setCity(context.getSource().getSB2_ORT());
+                adress.setStreet(context.getSource().getSB2_STRASSE());
+                adress.setStreetNo(context.getSource().getSB2_HAUSNUMMER());
+                adress.setZipCode(context.getSource().getSB2_POSTLEITZAHL());
+            } else if ("abw".equals(wohnhaftBei.toLowerCase())) {
+                adress.setCity(context.getSource().getABW_ORT());
+                adress.setStreet(context.getSource().getABW_STRASSE());
+                adress.setStreetNo(context.getSource().getABW_HAUSNUMMER());
+                adress.setZipCode(context.getSource().getABW_PLZ());
+            } else {
+                // default to sb1
+                adress.setCity(context.getSource().getSB1_ORT());
+                adress.setStreet(context.getSource().getSB1_STRASSE());
+                adress.setStreetNo(context.getSource().getSB1_HAUSNUMMER());
+                adress.setZipCode(context.getSource().getSB1_POSTLEITZAHL());
+            }
+
             return adress;
         };
 
@@ -94,12 +110,15 @@ public class ModelMapperConfiguration {
             if (context == null || context.getSource() == null) {
                 return null;
             }
-            // TODO: add ABW
-            List<Parent> parents = List.of(
-                    new Parent(ParentType.sb1, context.getSource().getSB1_VORNAME(),
-                            context.getSource().getSB1_NACHNAME()),
-                    new Parent(ParentType.sb2, context.getSource().getSB2_VORNAME(),
-                            context.getSource().getSB2_NACHNAME()));
+            List<Parent> parents = new ArrayList<>();
+
+            addParentIfExists(parents, ParentType.sb1, context.getSource().getSB1_VORNAME(),
+                    context.getSource().getSB1_NACHNAME());
+            addParentIfExists(parents, ParentType.sb2, context.getSource().getSB2_VORNAME(),
+                    context.getSource().getSB2_NACHNAME());
+            addParentIfExists(parents, ParentType.abw, context.getSource().getABW_VORNAME(),
+                    context.getSource().getABW_NACHNAME());
+
             return parents;
         };
 
@@ -115,5 +134,11 @@ public class ModelMapperConfiguration {
         });
 
         return mapper;
+    }
+
+    private void addParentIfExists(List<Parent> parentList, ParentType type, String firstname, String lastname) {
+        if (firstname == null || firstname.length() > 0 || lastname == null || lastname.length() > 0) {
+            parentList.add(new Parent(type, firstname, lastname));
+        }
     }
 }

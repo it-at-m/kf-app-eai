@@ -36,7 +36,7 @@ public class ApiErrorHandlingControllerAdvice {
     }
 
     @ResponseBody
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = { KitafinderException.class })
     ErrorResponse onMissingKitaKonfigDataException(KitafinderException e) {
         ErrorResponse response = new ErrorResponse(KitafinderException.class.getSimpleName(),
