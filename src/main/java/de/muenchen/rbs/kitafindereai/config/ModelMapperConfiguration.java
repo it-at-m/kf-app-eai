@@ -59,7 +59,8 @@ public class ModelMapperConfiguration {
                     Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findAny();
                     if (group.isEmpty()) {
                         // Group is not present yet.
-                        groups.add(new Group(groupName, groupName, new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
+                        groups.add(new Group(groupName, groupName,
+                                new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
                     } else {
                         // Add to existing group
                         group.get().getChildren().add(mapper.map(kind, Child.class));
@@ -85,12 +86,12 @@ public class ModelMapperConfiguration {
             String wohnhaftBei = context.getSource().getWOHNHAFT_BEI();
 
             ChildAddress adress = new ChildAddress();
-            if ("sb2".equals(wohnhaftBei.toLowerCase())) {
+            if (wohnhaftBei != null && "sb2".equals(wohnhaftBei.toLowerCase())) {
                 adress.setCity(context.getSource().getSB2_ORT());
                 adress.setStreet(context.getSource().getSB2_STRASSE());
                 adress.setStreetNo(context.getSource().getSB2_HAUSNUMMER());
                 adress.setZipCode(context.getSource().getSB2_POSTLEITZAHL());
-            } else if ("abw".equals(wohnhaftBei.toLowerCase())) {
+            } else if (wohnhaftBei != null && "abw".equals(wohnhaftBei.toLowerCase())) {
                 adress.setCity(context.getSource().getABW_ORT());
                 adress.setStreet(context.getSource().getABW_STRASSE());
                 adress.setStreetNo(context.getSource().getABW_HAUSNUMMER());
