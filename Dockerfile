@@ -6,3 +6,6 @@
 FROM registry.access.redhat.com/ubi9/openjdk-17-runtime:latest
 
 COPY target/*.jar /deployments/application.jar
+
+EXPOSE 8080
+ENTRYPOINT [ "java", "-jar", "/deployments/application.jar" ]
