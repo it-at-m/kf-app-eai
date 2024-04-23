@@ -5,6 +5,7 @@
 package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,13 @@ public class KitafinderExport {
     private String fehlermeldung;
     private int anzahlDatensaetze;
     private Collection<KitafinderKind> datensaetze;
+
+    public Optional<KitafinderKind> getAnyKind() {
+        if (getDatensaetze() != null) {
+            return getDatensaetze().stream().findAny();
+        } else {
+            return Optional.empty();
+        }
+    };
 
 }

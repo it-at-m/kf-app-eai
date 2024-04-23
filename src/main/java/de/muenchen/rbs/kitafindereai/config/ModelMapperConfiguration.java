@@ -17,8 +17,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderKind;
-import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderKindList;
 import de.muenchen.rbs.kitafindereai.api.model.Child;
 import de.muenchen.rbs.kitafindereai.api.model.ChildAddress;
 import de.muenchen.rbs.kitafindereai.api.model.Group;
@@ -40,8 +40,8 @@ public class ModelMapperConfiguration {
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
 
-        mapper.createTypeMap(KitafinderKindList.class, Institute.class).setProvider(source -> {
-            KitafinderKindList export = (KitafinderKindList) source.getSource();
+        mapper.createTypeMap(KitafinderExport.class, Institute.class).setProvider(source -> {
+            KitafinderExport export = (KitafinderExport) source.getSource();
             Institute institute = new Institute();
             Optional<KitafinderKind> anyKind = export.getAnyKind();
 
@@ -50,11 +50,11 @@ public class ModelMapperConfiguration {
             } else {
                 // get basic information
                 institute.setInstituteId(anyKind.get().getKITA_ID_EXTERN());
-                institute.setIntituteName(anyKind.get().getKITA_KITANAME());
+                institute.setInstituteName(anyKind.get().getKITA_KITANAME());
 
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
-                export.getDatensatz().stream().forEach(kind -> {
+                export.getDatensaetze().stream().forEach(kind -> {
                     String groupName = kind.getVER_GRUPPE();
                     Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findAny();
                     if (group.isEmpty()) {

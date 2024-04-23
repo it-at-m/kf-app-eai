@@ -28,7 +28,7 @@ public class Institute   {
     @Size(max = 128)
     @Schema(example = "Lerchenkinderhaus e. V.", description = "Name der Einrichtung")
     // Kitafinder-Column [KITA_KITANAME]
-    private String intituteName;
+    private String instituteName;
     
     private Collection<Group> groups;
   
