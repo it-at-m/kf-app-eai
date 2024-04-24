@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin
 @RestController
-@SecurityRequirement(name = "OAUTH2")
+@SecurityRequirement(name = "ApiClient")
 @RequestMapping(path = "/kitaApp/v1", produces = "application/json")
 public class KitaAppApiController {
 

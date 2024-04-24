@@ -4,19 +4,19 @@
  */
 package de.muenchen.rbs.kitafindereai.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
 
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
@@ -42,26 +42,46 @@ public class SecurityConfiguration {
     @Bean
     @Order(1)
     @Profile("!no-security")
-    public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http,
+            @Qualifier("internalTokenIntrospector") OpaqueTokenIntrospector introspector) throws Exception {
         http.securityMatcher("/internal/**")
                 .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                .oauth2ResourceServer((oauth2) -> oauth2
+                        .opaqueToken(config -> config.introspector(introspector)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
+    }
+
+    @Primary
+    @Bean("internalTokenIntrospector")
+    public OpaqueTokenIntrospector internalTokenIntrospector(
+            @Value("${app.security.introspection-url}") String introspectionUri,
+            @Value("${app.security.internal.client-id}") String clientId,
+            @Value("${app.security.internal.client-secret}") String clientSecret) {
+        return new SpringOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
     }
 
     /** Security for {@link KitaAppApiController} */
     @Bean
     @Order(2)
     @Profile("!no-security")
-    public SecurityFilterChain kitaAppApiSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain kitaAppApiSecurityFilterChain(HttpSecurity http,
+            @Qualifier("apiTokenIntrospector") OpaqueTokenIntrospector introspector) throws Exception {
         http.securityMatcher("/kitaApp/**")
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .opaqueToken(Customizer.withDefaults()));
+                        .opaqueToken(config -> config.introspector(introspector)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
+    }
+
+    @Bean("apiTokenIntrospector")
+    public OpaqueTokenIntrospector apiTokenIntrospector(
+            @Value("${app.security.introspection-url}") String introspectionUri,
+            @Value("${app.security.api.client-id}") String clientId,
+            @Value("${app.security.api.client-secret}") String clientSecret) {
+        return new SpringOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
     }
 
     /**
@@ -83,22 +103,6 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    /**
-     * UserDetailsService for BasicAuth
-     * 
-     * @param user User for BasicAuth
-     * @param password Password for BasicAuth
-     * @return UserDetailsService for BasicAuth
-     */
-    @Bean
-    @Profile("!no-security")
-    public UserDetailsService userDetailsService(@Value("${app.internalApi.authentication.user}") String user,
-            @Value("${app.internalApi.authentication.password}") String password) {
-        UserDetails userDetails = User.withDefaultPasswordEncoder().username(user).password(password).build();
-
-        return new InMemoryUserDetailsManager(userDetails);
-    }
-
     /** Security-config for profile 'no-security' */
     @Bean
     @Profile("no-security")
@@ -112,8 +116,8 @@ public class SecurityConfiguration {
 
     /** Swagger-API config for security */
     @Configuration
-    @SecurityScheme(name = "OAUTH2", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
-    @SecurityScheme(name = "BasicAuth", type = SecuritySchemeType.HTTP, scheme = "basic")
+    @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
+    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(password = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}")))
     public class SpringdocConfig {
     }
 

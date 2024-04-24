@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin
 @RestController
-@SecurityRequirement(name = "BasicAuth")
+@SecurityRequirement(name = "InternalLogin")
 @RequestMapping(path = "/internal/", produces = "application/json")
 public class InternalApiController {
 
