@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.KitafinderException;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.MissingKitaKonfigDataException;
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.NoDataException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -38,11 +39,18 @@ public class ApiErrorHandlingControllerAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = { KitafinderException.class })
-    ErrorResponse onMissingKitaKonfigDataException(KitafinderException e) {
+    ErrorResponse onKitafinderException(KitafinderException e) {
         ErrorResponse response = new ErrorResponse(KitafinderException.class.getSimpleName(),
                 e.getMessage(),
                 KitafinderException.DETAILS);
         return response;
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler(value = { NoDataException.class })
+    void onNoDataExceptionn(NoDataException e) {
+        // empty response
     }
 
     @Data

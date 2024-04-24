@@ -47,8 +47,12 @@ public class KitaFinderService {
                 decryptedPassword);
 
         if (HttpStatus.OK.equals(response.getStatusCode())) {
-            if (response.getBody().getStatus() == 0) {
-                return response.getBody();
+            if (response.getBody() != null && response.getBody().getStatus() == 0) {
+                if (response.getBody().getAnzahlDatensaetze() > 0) {
+                    return response.getBody();
+                } else {
+                    throw new NoDataException();
+                }
             } else {
                 log.error("Error in kitafinder response: " + response.getBody().getFehlermeldung());
                 throw new KitafinderException("Kitafinder call failed");
@@ -85,6 +89,15 @@ public class KitaFinderService {
         public KitafinderException(String message) {
             super(message);
         }
+    }
+
+    /**
+     * Exception for empty kitafinder data.
+     */
+    public class NoDataException extends RuntimeException {
+        private static final long serialVersionUID = -7755165370313373931L;
+        
+        public static String DETAILS = "Die Antwort des Kitafinders enthält keine Daten.";
     }
 
 }
