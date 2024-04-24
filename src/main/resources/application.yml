@@ -38,6 +38,12 @@ springdoc:
       clientId: ${app.security.api.client-id}
       realm: ${app.security.realm}
       appName: ${spring.application.name}
+      scopes:
+      - acr
+      - email
+      - profile
+      - roles
+      - web-origins
   default-produces-media-type: application/json
   
 server:

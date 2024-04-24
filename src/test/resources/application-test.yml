@@ -1,0 +1,6 @@
+app:
+  security:
+    api:
+      client-secret: "-"
+    internal:
+      client-secret: "-"
