@@ -18,11 +18,6 @@ app:
     encryptor:
       password: 377b88361dd70f30689cecf46e73e36d
       salt: 2c82deb3e67b0da1
-  internalApi:
-    # Overwrite in non-dev-environments!
-    authentication:
-      user: internalApiUser
-      password: be7de70f405a8cdb
   kitafinderAdapter:
     baseUrl: http://kitafinder-plan-k2.muenchen.de
       

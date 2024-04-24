@@ -40,6 +40,8 @@ public class KitaAppApiController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                     @Content(schema = @Schema(implementation = Institute.class)) }),
+            @ApiResponse(responseCode = "204", description = "no content", content = {
+                    @Content(schema = @Schema(implementation = Void.class)) }),
             @ApiResponse(responseCode = "401", description = "unauthorized", content = {
                     @Content(schema = @Schema(implementation = Void.class)) }),
             @ApiResponse(responseCode = "403", description = "forbidden", content = {

@@ -84,5 +84,7 @@ public class KitafinderKind {
     private String ABW_PLZ;
     private String ABW_ORT;
     private String ABW_LAND;
+    private String VER_GRUPPE_ID;
+    private String VER_GRUPPE_AB;
 
 }

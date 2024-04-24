@@ -133,15 +133,22 @@ class ModelMapperTest {
         kind3.setKIND_NACHNAME("nachname Test 3");
         kind3.setVER_GRUPPE("gruppe Test 2");
 
-        KitafinderExport source = new KitafinderExport(0, null, null, 3, List.of(kind1, kind2, kind3));
+        KitafinderKind kind4 = new KitafinderKind();
+        kind4.setKITA_ID_EXTERN("KITA-ID");
+        kind4.setKITA_KITANAME("KITA-NAME");
+        kind4.setKIND_VORNAME("vorname Test 4");
+        kind4.setKIND_NACHNAME("nachname Test 4");
+        kind4.setVER_GRUPPE_ID("gruppe Test 3");
+
+        KitafinderExport source = new KitafinderExport(0, null, null, 4, List.of(kind1, kind2, kind3, kind4));
 
         Institute dest = mapper.map(source, Institute.class);
 
         assertThat(dest.getInstituteId()).isEqualTo("KITA-ID");
         assertThat(dest.getInstituteName()).isEqualTo("KITA-NAME");
-        assertThat(dest.getGroups()).hasSize(2);
+        assertThat(dest.getGroups()).hasSize(3);
 
-        Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe Test 1".equals(g.getName())).findAny();
+        Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe Test 1".equals(g.getGroupId())).findAny();
         assertThat(group1).isNotEmpty();
         assertThat(group1.get().getChildren().stream().map(k -> k.getFirstName()).toList())
                 .containsExactlyInAnyOrder(kind1.getKIND_VORNAME());
@@ -150,6 +157,11 @@ class ModelMapperTest {
         assertThat(group2).isNotEmpty();
         assertThat(group2.get().getChildren().stream().map(k -> k.getFirstName()).toList())
                 .containsExactlyInAnyOrder(kind2.getKIND_VORNAME(), kind3.getKIND_VORNAME());
+
+        Optional<Group> group3 = dest.getGroups().stream().filter(g -> "gruppe Test 3".equals(g.getGroupId())).findAny();
+        assertThat(group3).isNotEmpty();
+        assertThat(group3.get().getChildren().stream().map(k -> k.getFirstName()).toList())
+                .containsExactlyInAnyOrder(kind4.getKIND_VORNAME());
     }
 
 }

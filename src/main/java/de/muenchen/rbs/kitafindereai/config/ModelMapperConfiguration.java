@@ -55,11 +55,15 @@ public class ModelMapperConfiguration {
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
                 export.getDatensaetze().stream().forEach(kind -> {
-                    String groupName = kind.getVER_GRUPPE();
-                    Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findAny();
+                    String originalGroupId = kind.getVER_GRUPPE_ID();
+                    String groupId = (originalGroupId == null || originalGroupId.length() == 0)
+                            ? kind.getVER_GRUPPE()
+                            : originalGroupId;
+
+                    Optional<Group> group = groups.stream().filter(g -> g.getGroupId().equals(groupId)).findAny();
                     if (group.isEmpty()) {
                         // Group is not present yet.
-                        groups.add(new Group(groupName, groupName,
+                        groups.add(new Group(groupId, kind.getVER_GRUPPE(),
                                 new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
                     } else {
                         // Add to existing group
