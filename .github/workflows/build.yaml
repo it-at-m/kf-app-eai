@@ -43,7 +43,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
-      - name: install
+      - name: test
         working-directory: ${{ env.MVN_PROJECT_ROOT }}
         run: mvn test
         
