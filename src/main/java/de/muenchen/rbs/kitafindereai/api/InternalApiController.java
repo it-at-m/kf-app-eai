@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin
 @RestController
+@PreAuthorize("hasAuthority('ROLE_kf-app-eai-access')")
 @SecurityRequirement(name = "InternalLogin")
 @RequestMapping(path = "/internal/", produces = "application/json")
 public class InternalApiController {
@@ -46,7 +48,7 @@ public class InternalApiController {
             @RequestBody KitafinderKitaKonfigDataWriteDto data) {
         log.info("Endpoint POST kitadata/{} was called. Updating/saving the received data...", kibigWebId);
         Optional<KitafinderKitaKonfigData> kitaKonfig = repository.findById(kibigWebId);
-        
+
         // retrieve existing data or get default
         KitafinderKitaKonfigData kitaKonfigData = kitaKonfig.orElseGet(() -> {
             KitafinderKitaKonfigData defaultData = new KitafinderKitaKonfigData();
@@ -58,7 +60,7 @@ public class InternalApiController {
         kitaKonfigData.setPassword(encryptor.encrypt(data.getPassword()));
         kitaKonfigData.setKitaIdExtern(data.getKitaIdExtern());
         kitaKonfigData.setTraeger(data.getTraeger());
-        
+
         // save
         KitafinderKitaKonfigData savedData = repository.save(kitaKonfigData);
 

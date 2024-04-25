@@ -58,7 +58,7 @@ public class SecurityConfiguration {
             @Value("${app.security.introspection-url}") String introspectionUri,
             @Value("${app.security.internal.client-id}") String clientId,
             @Value("${app.security.internal.client-secret}") String clientSecret) {
-        return new SpringOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
+        return new CustomAuthoritiesOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
     }
 
     /** Security for {@link KitaAppApiController} */
@@ -117,7 +117,7 @@ public class SecurityConfiguration {
     /** Swagger-API config for security */
     @Configuration
     @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
-    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(password = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
+    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}")))
     public class SpringdocConfig {
     }
 

@@ -1,4 +1,9 @@
 app:
+  db:
+    url: kfappeaidpk001.srv.muenchen.de
+    user: kf_app_eai
+    # Set before start:
+    # password: todo 
   security:
     sso-base-url: https://ssodev.muenchen.de
     realm: A23
@@ -34,11 +39,7 @@ springdoc:
       realm: ${app.security.realm}
       appName: ${spring.application.name}
       scopes:
-      - acr
       - email
-      - profile
-      - roles
-      - web-origins
   default-produces-media-type: application/json
   
 server:
