@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.rbs.kitafindereai.data;
+package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data;
 
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import jakarta.persistence.Column;
@@ -19,7 +19,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "kitaData")
+@Table(name = "KITA_DATA")
 public class KitafinderKitaKonfigData {
 
     @Id

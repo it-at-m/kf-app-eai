@@ -2,7 +2,7 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2022
  */
-package de.muenchen.rbs.kitafindereai.data;
+package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data;
 
 import org.springframework.data.repository.CrudRepository;
 

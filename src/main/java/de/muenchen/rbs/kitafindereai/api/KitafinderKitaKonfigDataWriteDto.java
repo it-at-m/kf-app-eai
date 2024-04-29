@@ -2,8 +2,9 @@
  * Copyright (c): it@M - Dienstleister für Informations- und Telekommunikationstechnik
  * der Landeshauptstadt München, 2024
  */
-package de.muenchen.rbs.kitafindereai.data;
+package de.muenchen.rbs.kitafindereai.api;
 
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -13,14 +14,16 @@ import lombok.Data;
  * @author m.zollbrecht
  */
 @Data
-public class KitafinderKitaKonfigDataReadDto {
+public class KitafinderKitaKonfigDataWriteDto {
 
-    @Size(max = 255)
-    private String kibigwebId;
+    // kibigwebid is part of url in this case.
 
     @Size(max = 255)
     private String kitaIdExtern;
 
     @Size(max = 255)
     private String traeger;
+
+    @Size(max = 255)
+    private String password;
 }

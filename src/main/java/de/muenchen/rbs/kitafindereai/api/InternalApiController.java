@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigData;
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataReadDto;
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataRepository;
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataWriteDto;
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;

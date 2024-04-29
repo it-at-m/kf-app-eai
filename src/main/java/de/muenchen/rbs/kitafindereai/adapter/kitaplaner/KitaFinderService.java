@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigData;
-import de.muenchen.rbs.kitafindereai.data.KitafinderKitaKonfigDataRepository;
 import lombok.extern.slf4j.Slf4j;
 
 /**
