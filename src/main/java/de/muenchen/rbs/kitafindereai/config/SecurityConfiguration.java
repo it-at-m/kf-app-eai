@@ -15,6 +15,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
 import org.springframework.security.web.SecurityFilterChain;
@@ -110,12 +111,14 @@ public class SecurityConfiguration {
             throws Exception {
         log.warn("Using mode 'no-security'!");
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-        http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
+        http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable()).headers(headers -> headers
+                .frameOptions(FrameOptionsConfig::disable));
         return http.build();
     }
 
     /** Swagger-API config for security */
     @Configuration
+    @Profile("!no-security")
     @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
     @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}")))
     public class SpringdocConfig {
