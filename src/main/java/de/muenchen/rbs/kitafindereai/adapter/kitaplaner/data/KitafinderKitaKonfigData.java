@@ -4,6 +4,8 @@
  */
 package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data;
 
+import java.time.LocalDateTime;
+
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,4 +40,12 @@ public class KitafinderKitaKonfigData {
     @Column
     @Size(max = 255)
     private String traeger;
+
+    @Column
+    private LocalDateTime lastChangedAt;
+
+    @Column
+    private String lastChangedBy;
+    
+    
 }

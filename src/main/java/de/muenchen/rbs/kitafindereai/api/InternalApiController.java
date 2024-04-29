@@ -1,11 +1,14 @@
 package de.muenchen.rbs.kitafindereai.api;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +61,10 @@ public class InternalApiController {
         kitaKonfigData.setPassword(encryptor.encrypt(data.getPassword()));
         kitaKonfigData.setKitaIdExtern(data.getKitaIdExtern());
         kitaKonfigData.setTraeger(data.getTraeger());
+        // Add user and timestamp
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        kitaKonfigData.setLastChangedBy(authentication.getName());
+        kitaKonfigData.setLastChangedAt(LocalDateTime.now());
 
         // save
         KitafinderKitaKonfigData savedData = repository.save(kitaKonfigData);

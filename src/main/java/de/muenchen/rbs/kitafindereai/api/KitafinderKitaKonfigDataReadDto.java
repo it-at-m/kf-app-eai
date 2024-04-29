@@ -4,6 +4,8 @@
  */
 package de.muenchen.rbs.kitafindereai.api;
 
+import java.time.LocalDateTime;
+
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -24,4 +26,9 @@ public class KitafinderKitaKonfigDataReadDto {
 
     @Size(max = 255)
     private String traeger;
+
+    private LocalDateTime lastChangedAt;
+
+    @Size(max = 255)
+    private String lastChangedBy;
 }
