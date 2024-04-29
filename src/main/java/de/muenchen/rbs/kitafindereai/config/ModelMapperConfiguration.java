@@ -49,21 +49,21 @@ public class ModelMapperConfiguration {
                 return null;
             } else {
                 // get basic information
-                institute.setInstituteId(anyKind.get().getKITA_ID_EXTERN());
-                institute.setInstituteName(anyKind.get().getKITA_KITANAME());
+                institute.setInstituteId(anyKind.get().getKitaIdExtern());
+                institute.setInstituteName(anyKind.get().getKitaKitaname());
 
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
                 export.getDatensaetze().stream().forEach(kind -> {
-                    String originalGroupId = kind.getVER_GRUPPE_ID();
+                    String originalGroupId = kind.getVerGruppeId();
                     String groupId = (originalGroupId == null || originalGroupId.length() == 0)
-                            ? kind.getVER_GRUPPE()
+                            ? kind.getVerGruppe()
                             : originalGroupId;
 
                     Optional<Group> group = groups.stream().filter(g -> g.getGroupId().equals(groupId)).findAny();
                     if (group.isEmpty()) {
                         // Group is not present yet.
-                        groups.add(new Group(groupId, kind.getVER_GRUPPE(),
+                        groups.add(new Group(groupId, kind.getVerGruppe(),
                                 new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
                     } else {
                         // Add to existing group
@@ -87,25 +87,25 @@ public class ModelMapperConfiguration {
             if (context == null || context.getSource() == null) {
                 return null;
             }
-            String wohnhaftBei = context.getSource().getWOHNHAFT_BEI();
+            String wohnhaftBei = context.getSource().getWohnhaftBei();
 
             ChildAddress adress = new ChildAddress();
             if (wohnhaftBei != null && "sb2".equals(wohnhaftBei.toLowerCase())) {
-                adress.setCity(context.getSource().getSB2_ORT());
-                adress.setStreet(context.getSource().getSB2_STRASSE());
-                adress.setStreetNo(context.getSource().getSB2_HAUSNUMMER());
-                adress.setZipCode(context.getSource().getSB2_POSTLEITZAHL());
+                adress.setCity(context.getSource().getSb2Ort());
+                adress.setStreet(context.getSource().getSb2Strasse());
+                adress.setStreetNo(context.getSource().getSb2Hausnummer());
+                adress.setZipCode(context.getSource().getSb2Postleitzahl());
             } else if (wohnhaftBei != null && "abw".equals(wohnhaftBei.toLowerCase())) {
-                adress.setCity(context.getSource().getABW_ORT());
-                adress.setStreet(context.getSource().getABW_STRASSE());
-                adress.setStreetNo(context.getSource().getABW_HAUSNUMMER());
-                adress.setZipCode(context.getSource().getABW_PLZ());
+                adress.setCity(context.getSource().getAbwOrt());
+                adress.setStreet(context.getSource().getAbwStrasse());
+                adress.setStreetNo(context.getSource().getAbwHausnummer());
+                adress.setZipCode(context.getSource().getAbwPlz());
             } else {
                 // default to sb1
-                adress.setCity(context.getSource().getSB1_ORT());
-                adress.setStreet(context.getSource().getSB1_STRASSE());
-                adress.setStreetNo(context.getSource().getSB1_HAUSNUMMER());
-                adress.setZipCode(context.getSource().getSB1_POSTLEITZAHL());
+                adress.setCity(context.getSource().getSb1Ort());
+                adress.setStreet(context.getSource().getSb1Strasse());
+                adress.setStreetNo(context.getSource().getSb1Hausnummer());
+                adress.setZipCode(context.getSource().getSb1Postleitzahl());
             }
 
             return adress;
@@ -117,23 +117,23 @@ public class ModelMapperConfiguration {
             }
             List<Parent> parents = new ArrayList<>();
 
-            addParentIfExists(parents, ParentType.sb1, context.getSource().getSB1_VORNAME(),
-                    context.getSource().getSB1_NACHNAME());
-            addParentIfExists(parents, ParentType.sb2, context.getSource().getSB2_VORNAME(),
-                    context.getSource().getSB2_NACHNAME());
-            addParentIfExists(parents, ParentType.abw, context.getSource().getABW_VORNAME(),
-                    context.getSource().getABW_NACHNAME());
+            addParentIfExists(parents, ParentType.sb1, context.getSource().getSb1Vorname(),
+                    context.getSource().getSb1Nachname());
+            addParentIfExists(parents, ParentType.sb2, context.getSource().getSb2Vorname(),
+                    context.getSource().getSb2Nachname());
+            addParentIfExists(parents, ParentType.abw, context.getSource().getAbwVorname(),
+                    context.getSource().getAbwNachname());
 
             return parents;
         };
 
         mapper.createTypeMap(KitafinderKind.class, Child.class).addMappings(m -> {
-            m.map(KitafinderKind::getKIND_ID_EXTERN, Child::setChildId);
-            m.map(KitafinderKind::getKIND_VORNAME, Child::setFirstName);
-            m.map(KitafinderKind::getKIND_NACHNAME, Child::setLastName);
-            m.using(dateConverter).map(KitafinderKind::getKIND_GEBDATUM, Child::setBirthday);
-            m.using(dateConverter).map(KitafinderKind::getVER_VERTRAG_AB, Child::setCareStart);
-            m.using(dateConverter).map(KitafinderKind::getVER_KUENDIGUNG_ZUM, Child::setCareEnd);
+            m.map(KitafinderKind::getKindIdExtern, Child::setChildId);
+            m.map(KitafinderKind::getKindVorname, Child::setFirstName);
+            m.map(KitafinderKind::getKindNachname, Child::setLastName);
+            m.using(dateConverter).map(KitafinderKind::getKindGebdatum, Child::setBirthday);
+            m.using(dateConverter).map(KitafinderKind::getVerVertragAb, Child::setCareStart);
+            m.using(dateConverter).map(KitafinderKind::getVerKuendigungZum, Child::setCareEnd);
             m.using(adressConverter).map(k -> k, Child::setAddress);
             m.using(parentConverter).map(k -> k, Child::setParents);
         });

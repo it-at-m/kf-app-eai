@@ -63,7 +63,7 @@ public class KitaAppApiController {
         log.info("Endpoint GET einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
-        Institute institute = mapper.map(export.getDatensaetze(), Institute.class);
+        Institute institute = mapper.map(export, Institute.class);
         return new ResponseEntity<Institute>(institute, HttpStatus.OK);
 
     }
