@@ -32,75 +32,75 @@ class ModelMapperTest {
     @Test
     void mapsKind() {
         KitafinderKind source = new KitafinderKind();
-        source.setKIND_VORNAME("vorname Test");
-        source.setKIND_NACHNAME("nachname Test");
-        source.setKIND_ID_EXTERN("id extern Test");
-        source.setKIND_GEBDATUM("28.10.2018");
-        source.setVER_VERTRAG_AB("01.09.2020");
-        source.setVER_KUENDIGUNG_ZUM("31.10.2020");
-        source.setSB1_ORT("München");
-        source.setSB1_STRASSE("Dingolfinger Str.");
-        source.setSB1_HAUSNUMMER("21a");
-        source.setSB1_POSTLEITZAHL("80559");
-        source.setSB1_VORNAME("sb1 vorname Test");
-        source.setSB1_NACHNAME("sb1 nachname Test");
-        source.setSB2_VORNAME("sb2 vorname Test");
-        source.setSB2_NACHNAME("sb2 nachname Test");
+        source.setKindVorname("vorname Test");
+        source.setKindNachname("nachname Test");
+        source.setKindIdExtern("id extern Test");
+        source.setKindGebdatum("28.10.2018");
+        source.setVerVertragAb("01.09.2020");
+        source.setVerKuendigungZum("31.10.2020");
+        source.setSb1Ort("München");
+        source.setSb1Strasse("Dingolfinger Str.");
+        source.setSb1Hausnummer("21a");
+        source.setSb1Postleitzahl("80559");
+        source.setSb1Vorname("sb1 vorname Test");
+        source.setSb1Nachname("sb1 nachname Test");
+        source.setSb2Vorname("sb2 vorname Test");
+        source.setSb2Nachname("sb2 nachname Test");
 
         Child dest = mapper.map(source, Child.class);
 
-        assertThat(dest.getChildId()).isEqualTo(source.getKIND_ID_EXTERN());
-        assertThat(dest.getFirstName()).isEqualTo(source.getKIND_VORNAME());
+        assertThat(dest.getChildId()).isEqualTo(source.getKindIdExtern());
+        assertThat(dest.getFirstName()).isEqualTo(source.getKindVorname());
         assertThat(dest.getBirthday())
-                .isEqualTo(LocalDate.parse(source.getKIND_GEBDATUM(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getKindGebdatum(), ModelMapperConfiguration.DATE_FORMATTER));
         assertThat(dest.getCareStart())
-                .isEqualTo(LocalDate.parse(source.getVER_VERTRAG_AB(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getVerVertragAb(), ModelMapperConfiguration.DATE_FORMATTER));
         assertThat(dest.getCareEnd())
-                .isEqualTo(LocalDate.parse(source.getVER_KUENDIGUNG_ZUM(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getVerKuendigungZum(), ModelMapperConfiguration.DATE_FORMATTER));
     }
 
     @Test
     void mapsKind_adresseAbweichend() {
         KitafinderKind source = new KitafinderKind();
-        source.setKIND_VORNAME("vorname Test");
-        source.setKIND_NACHNAME("nachname Test");
-        source.setKIND_ID_EXTERN("id extern Test");
-        source.setKIND_GEBDATUM("28.10.2018");
-        source.setVER_VERTRAG_AB("01.09.2020");
-        source.setVER_KUENDIGUNG_ZUM("31.10.2020");
-        source.setSB1_ORT("München");
-        source.setSB1_STRASSE("Dingolfinger Str.");
-        source.setSB1_HAUSNUMMER("21a");
-        source.setSB1_POSTLEITZAHL("80559");
-        source.setSB1_VORNAME("sb1 vorname Test");
-        source.setSB1_NACHNAME("sb1 nachname Test");
-        source.setSB2_VORNAME("sb2 vorname Test");
-        source.setSB2_NACHNAME("sb2 nachname Test");
-        source.setABW_VORNAME("abw vorname Test");
-        source.setABW_NACHNAME("abw nachname Test");
-        source.setABW_STRASSE("Marienplatz");
-        source.setABW_HAUSNUMMER("12");
-        source.setABW_PLZ("80331");
-        source.setABW_ORT("München");
-        source.setWOHNHAFT_BEI("ABW");
+        source.setKindVorname("vorname Test");
+        source.setKindNachname("nachname Test");
+        source.setKindIdExtern("id extern Test");
+        source.setKindGebdatum("28.10.2018");
+        source.setVerVertragAb("01.09.2020");
+        source.setVerKuendigungZum("31.10.2020");
+        source.setSb1Ort("München");
+        source.setSb1Strasse("Dingolfinger Str.");
+        source.setSb1Hausnummer("21a");
+        source.setSb1Postleitzahl("80559");
+        source.setSb1Vorname("sb1 vorname Test");
+        source.setSb1Nachname("sb1 nachname Test");
+        source.setSb2Vorname("sb2 vorname Test");
+        source.setSb2Nachname("sb2 nachname Test");
+        source.setAbwVorname("abw vorname Test");
+        source.setAbwNachname("abw nachname Test");
+        source.setAbwStrasse("Marienplatz");
+        source.setAbwHausnummer("12");
+        source.setAbwPlz("80331");
+        source.setAbwOrt("München");
+        source.setWohnhaftBei("ABW");
 
         Child dest = mapper.map(source, Child.class);
 
-        assertThat(dest.getChildId()).isEqualTo(source.getKIND_ID_EXTERN());
-        assertThat(dest.getFirstName()).isEqualTo(source.getKIND_VORNAME());
+        assertThat(dest.getChildId()).isEqualTo(source.getKindIdExtern());
+        assertThat(dest.getFirstName()).isEqualTo(source.getKindVorname());
         assertThat(dest.getBirthday())
-                .isEqualTo(LocalDate.parse(source.getKIND_GEBDATUM(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getKindGebdatum(), ModelMapperConfiguration.DATE_FORMATTER));
         assertThat(dest.getCareStart())
-                .isEqualTo(LocalDate.parse(source.getVER_VERTRAG_AB(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getVerVertragAb(), ModelMapperConfiguration.DATE_FORMATTER));
         assertThat(dest.getCareEnd())
-                .isEqualTo(LocalDate.parse(source.getVER_KUENDIGUNG_ZUM(), ModelMapperConfiguration.DATE_FORMATTER));
+                .isEqualTo(LocalDate.parse(source.getVerKuendigungZum(), ModelMapperConfiguration.DATE_FORMATTER));
 
         ChildAddress adress = dest.getAddress();
 
-        assertThat(adress.getCity()).isEqualTo(source.getABW_ORT());
-        assertThat(adress.getZipCode()).isEqualTo(source.getABW_PLZ());
-        assertThat(adress.getStreet()).isEqualTo(source.getABW_STRASSE());
-        assertThat(adress.getStreetNo()).isEqualTo(source.getABW_HAUSNUMMER());
+        assertThat(adress.getCity()).isEqualTo(source.getAbwOrt());
+        assertThat(adress.getZipCode()).isEqualTo(source.getAbwPlz());
+        assertThat(adress.getStreet()).isEqualTo(source.getAbwStrasse());
+        assertThat(adress.getStreetNo()).isEqualTo(source.getAbwHausnummer());
 
         Collection<Parent> parents = dest.getParents();
 
@@ -113,32 +113,29 @@ class ModelMapperTest {
     @Test
     void mapsKitafinderKindList() {
         KitafinderKind kind1 = new KitafinderKind();
-        kind1.setKITA_ID_EXTERN("KITA-ID");
-        kind1.setKITA_KITANAME("KITA-NAME");
-        kind1.setKIND_VORNAME("vorname Test 1");
-        kind1.setKIND_NACHNAME("nachname Test 1");
-        kind1.setVER_GRUPPE("gruppe Test 1");
-
+        kind1.setKitaIdExtern("KITA-ID");
+        kind1.setKitaKitaname("KITA-NAME");
+        kind1.setKindVorname("vorname Test 1");
+        kind1.setKindNachname("nachname Test 1");
+        kind1.setVerGruppe("gruppe Test 1");
         KitafinderKind kind2 = new KitafinderKind();
-        kind2.setKITA_ID_EXTERN("KITA-ID");
-        kind2.setKITA_KITANAME("KITA-NAME");
-        kind2.setKIND_VORNAME("vorname Test 2");
-        kind2.setKIND_NACHNAME("nachname Test 2");
-        kind2.setVER_GRUPPE("gruppe Test 2");
-
+        kind2.setKitaIdExtern("KITA-ID");
+        kind2.setKitaKitaname("KITA-NAME");
+        kind2.setKindVorname("vorname Test 2");
+        kind2.setKindNachname("nachname Test 2");
+        kind2.setVerGruppe("gruppe Test 2");
         KitafinderKind kind3 = new KitafinderKind();
-        kind3.setKITA_ID_EXTERN("KITA-ID");
-        kind3.setKITA_KITANAME("KITA-NAME");
-        kind3.setKIND_VORNAME("vorname Test 3");
-        kind3.setKIND_NACHNAME("nachname Test 3");
-        kind3.setVER_GRUPPE("gruppe Test 2");
-
+        kind3.setKitaIdExtern("KITA-ID");
+        kind3.setKitaKitaname("KITA-NAME");
+        kind3.setKindVorname("vorname Test 3");
+        kind3.setKindNachname("nachname Test 3");
+        kind3.setVerGruppe("gruppe Test 2");
         KitafinderKind kind4 = new KitafinderKind();
-        kind4.setKITA_ID_EXTERN("KITA-ID");
-        kind4.setKITA_KITANAME("KITA-NAME");
-        kind4.setKIND_VORNAME("vorname Test 4");
-        kind4.setKIND_NACHNAME("nachname Test 4");
-        kind4.setVER_GRUPPE_ID("gruppe Test 3");
+        kind4.setKitaIdExtern("KITA-ID");
+        kind4.setKitaKitaname("KITA-NAME");
+        kind4.setKindVorname("vorname Test 4");
+        kind4.setKindNachname("nachname Test 4");
+        kind4.setVerGruppeId("gruppe Test 3");
 
         KitafinderExport source = new KitafinderExport(0, null, null, 4, List.of(kind1, kind2, kind3, kind4));
 
@@ -148,20 +145,22 @@ class ModelMapperTest {
         assertThat(dest.getInstituteName()).isEqualTo("KITA-NAME");
         assertThat(dest.getGroups()).hasSize(3);
 
-        Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe Test 1".equals(g.getGroupId())).findAny();
+        Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe Test 1".equals(g.getGroupId()))
+                .findAny();
         assertThat(group1).isNotEmpty();
         assertThat(group1.get().getChildren().stream().map(k -> k.getFirstName()).toList())
-                .containsExactlyInAnyOrder(kind1.getKIND_VORNAME());
+                .containsExactlyInAnyOrder(kind1.getKindVorname());
 
         Optional<Group> group2 = dest.getGroups().stream().filter(g -> "gruppe Test 2".equals(g.getName())).findAny();
         assertThat(group2).isNotEmpty();
         assertThat(group2.get().getChildren().stream().map(k -> k.getFirstName()).toList())
-                .containsExactlyInAnyOrder(kind2.getKIND_VORNAME(), kind3.getKIND_VORNAME());
+                .containsExactlyInAnyOrder(kind2.getKindVorname(), kind3.getKindVorname());
 
-        Optional<Group> group3 = dest.getGroups().stream().filter(g -> "gruppe Test 3".equals(g.getGroupId())).findAny();
+        Optional<Group> group3 = dest.getGroups().stream().filter(g -> "gruppe Test 3".equals(g.getGroupId()))
+                .findAny();
         assertThat(group3).isNotEmpty();
         assertThat(group3.get().getChildren().stream().map(k -> k.getFirstName()).toList())
-                .containsExactlyInAnyOrder(kind4.getKIND_VORNAME());
+                .containsExactlyInAnyOrder(kind4.getKindVorname());
     }
 
 }
