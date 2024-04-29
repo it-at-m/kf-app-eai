@@ -1,6 +1,6 @@
 app:
   db:
-    url: kfappeaidpk001.srv.muenchen.de
+    url: jdbc:h2:mem:testdb
     user: kf_app_eai
     # Set before start:
     # password: todo 
@@ -25,10 +25,14 @@ app:
       salt: 2c82deb3e67b0da1
   kitafinderAdapter:
     baseUrl: http://kitafinder-plan-k2.muenchen.de
-      
+
 spring:
   application:
-    name: kita-finder-eai
+    name: kf-app-eai
+  datasource:
+    url: ${app.db.url}
+    username: ${app.db.user}
+    password: ${app.db.password}
           
 # swagger-ui configuration
 springdoc:

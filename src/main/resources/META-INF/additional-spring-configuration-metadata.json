@@ -20,12 +20,22 @@
     "description": "SSO-Realm."
   },
   {
-    "name": "app.security.client-id",
+    "name": "app.security.api.client-id",
     "type": "java.lang.String",
     "description": "client-id für die Authentifizierung"
   },
   {
-    "name": "app.security.client-secret",
+    "name": "app.security.api.client-secret",
+    "type": "java.lang.String",
+    "description": "client-secret für die Authentifizierung"
+  },
+  {
+    "name": "app.security.internal.client-id",
+    "type": "java.lang.String",
+    "description": "client-id für die Authentifizierung"
+  },
+  {
+    "name": "app.security.internal.client-secret",
     "type": "java.lang.String",
     "description": "client-secret für die Authentifizierung"
   },
@@ -35,18 +45,33 @@
     "description": "URL, an der die Oauth2 Tokens abgefragt werden."
   },
   {
-    "name": "app.internalApi.authentication.user",
+    "name": "app.security.authorization-url",
     "type": "java.lang.String",
-    "description": "User für Basic-Auth."
+    "description": "URL zur Authentifizierung am OAuth-Server."
   },
   {
-    "name": "app.internalApi.authentication.password",
+    "name": "app.security.introspection-url",
     "type": "java.lang.String",
-    "description": "Password für Basic-Auth."
+    "description": "URL für die Introspection der Token."
   },
   {
     "name": "app.kitafinderAdapter.base-url",
     "type": "java.lang.String",
     "description": "URL der Kita-Planer Umgebung, von der die Daten abgefragt werden sollen."
+  },
+  {
+    "name": "app.db.url",
+    "type": "java.lang.String",
+    "description": "URL der Datenbank."
+  },
+  {
+    "name": "app.db.user",
+    "type": "java.lang.String",
+    "description": "User zur Anmeldung auf der Datenbank."
+  },
+  {
+    "name": "app.db.password",
+    "type": "java.lang.String",
+    "description": "Passwort zur Anmeldung auf der Datenbank."
   }
 ]}
