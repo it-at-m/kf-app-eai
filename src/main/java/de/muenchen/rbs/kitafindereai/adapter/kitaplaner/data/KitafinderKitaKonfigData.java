@@ -19,7 +19,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "KITA_DATA")
+@Table(name = "kita_data")
 public class KitafinderKitaKonfigData {
 
     @Id
