@@ -73,5 +73,10 @@
     "name": "app.db.password",
     "type": "java.lang.String",
     "description": "Passwort zur Anmeldung auf der Datenbank."
+  },
+  {
+    "name": "app.db.schema",
+    "type": "java.lang.String",
+    "description": "Schema auf der verwendeten Datenbank."
   }
 ]}
