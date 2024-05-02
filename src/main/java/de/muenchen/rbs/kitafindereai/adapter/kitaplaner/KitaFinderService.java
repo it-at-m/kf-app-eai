@@ -56,7 +56,7 @@ public class KitaFinderService {
         ResponseEntity<KitafinderExport> response = adapter.exportKitaData(
                 data.getTraeger(),
                 data.getKitaIdExtern(),
-                decryptedPassword + "1");
+                decryptedPassword);
 
         if (HttpStatus.OK.equals(response.getStatusCode())) {
             if (response.getBody() != null && response.getBody().getStatus() == 0) {
