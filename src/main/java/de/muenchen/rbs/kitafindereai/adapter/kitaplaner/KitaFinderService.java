@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
+import de.muenchen.rbs.kitafindereai.audit.AuditService;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,33 +35,56 @@ public class KitaFinderService {
     @Autowired
     private TextEncryptor encryptor;
 
+    @Autowired
+    private AuditService auditService;
+
     public KitafinderExport exportKitaData(String kibigwebId)
             throws MissingKitaKonfigDataException, KitafinderException {
         KitafinderKitaKonfigData data = repository.findById(kibigwebId).orElseThrow(
-                () -> new MissingKitaKonfigDataException("keine Daten zu kibigwebId " + kibigwebId + " vorhanden"));
+                () -> {
+                    final String ERROR_MESSAGE = "keine Daten zu kibigwebId " + kibigwebId + " vorhanden";
+                    log.error(ERROR_MESSAGE);
+                    auditService.storeReqResEntrie(kibigwebId, null, null,
+                            HttpStatus.UNPROCESSABLE_ENTITY.toString(),
+                            MissingKitaKonfigDataException.class.getSimpleName(),
+                            MissingKitaKonfigDataException.DETAILS, ERROR_MESSAGE, null);
+                    return new MissingKitaKonfigDataException(ERROR_MESSAGE);
+                });
 
         String decryptedPassword = encryptor.decrypt(data.getPassword());
 
         ResponseEntity<KitafinderExport> response = adapter.exportKitaData(
                 data.getTraeger(),
                 data.getKitaIdExtern(),
-                decryptedPassword);
+                decryptedPassword + "1");
 
         if (HttpStatus.OK.equals(response.getStatusCode())) {
             if (response.getBody() != null && response.getBody().getStatus() == 0) {
                 if (response.getBody().getAnzahlDatensaetze() > 0) {
+                    auditService.storeReqResEntrie(kibigwebId, data.getKitaIdExtern(), data.getTraeger(),
+                            HttpStatus.OK.toString(), null, null, null, null);
                     return response.getBody();
                 } else {
+                    auditService.storeReqResEntrie(kibigwebId, data.getKitaIdExtern(), data.getTraeger(),
+                            HttpStatus.NO_CONTENT.toString(), NoDataException.class.getSimpleName(), null, null, null);
                     throw new NoDataException();
                 }
             } else {
+                final String ERROR_MESSAGE = "Kitafinder call failed";
                 log.error("Error in kitafinder response: " + response.getBody().getFehlermeldung());
-                throw new KitafinderException("Kitafinder call failed");
+                auditService.storeReqResEntrie(kibigwebId, data.getKitaIdExtern(), data.getTraeger(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.toString(), KitafinderException.class.getSimpleName(),
+                        KitafinderException.DETAILS, ERROR_MESSAGE, response.getBody().getFehlermeldung());
+                throw new KitafinderException(ERROR_MESSAGE);
             }
         } else {
-            log.error("Error getting kitafinder response. Status code " + response.getStatusCode().value());
+            final String ERROR_MESSAGE = "Kitafinder call failed with status code " + response.getStatusCode().value();
+            log.error(ERROR_MESSAGE);
+            auditService.storeReqResEntrie(kibigwebId, data.getKitaIdExtern(), data.getTraeger(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.toString(), KitafinderException.class.getSimpleName(),
+                    KitafinderException.DETAILS, ERROR_MESSAGE, null);
             throw new KitafinderException(
-                    "Kitafinder call failed with status code " + response.getStatusCode().value());
+                    ERROR_MESSAGE);
         }
     }
 
@@ -83,7 +107,7 @@ public class KitaFinderService {
      */
     public class KitafinderException extends RuntimeException {
         private static final long serialVersionUID = 1251395732301276870L;
-        
+
         public static String DETAILS = "Beim Aufruf des Kitafinders ist ein Fehler aufgetreten.";
 
         public KitafinderException(String message) {
@@ -96,7 +120,7 @@ public class KitaFinderService {
      */
     public class NoDataException extends RuntimeException {
         private static final long serialVersionUID = -7755165370313373931L;
-        
+
         public static String DETAILS = "Die Antwort des Kitafinders enthält keine Daten.";
     }
 
