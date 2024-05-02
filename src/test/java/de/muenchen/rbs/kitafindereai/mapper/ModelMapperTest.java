@@ -137,7 +137,7 @@ class ModelMapperTest {
         kind4.setKindNachname("nachname Test 4");
         kind4.setVerGruppeId("gruppe Test 3");
 
-        KitafinderExport source = new KitafinderExport(0, null, null, 4, List.of(kind1, kind2, kind3, kind4));
+        KitafinderExport source = new KitafinderExport(0, null, null, 4, List.of(kind1, kind2, kind3, kind4), null);
 
         Institute dest = mapper.map(source, Institute.class);
 

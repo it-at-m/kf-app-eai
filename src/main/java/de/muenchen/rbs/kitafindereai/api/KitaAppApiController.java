@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
+import de.muenchen.rbs.kitafindereai.audit.AuditService;
 import de.muenchen.rbs.kitafindereai.config.ApiErrorHandlingControllerAdvice.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,6 +37,9 @@ public class KitaAppApiController {
 
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private AuditService auditService;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
@@ -64,6 +68,11 @@ public class KitaAppApiController {
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export, Institute.class);
+
+        auditService.storeReqResEntrie(export.getAuditDto().getReqKibigwebId(),
+                export.getAuditDto().getRslvKitaIdExtern(), export.getAuditDto().getRslvTraeger(),
+                HttpStatus.OK.toString(), null, null);
+
         return new ResponseEntity<Institute>(institute, HttpStatus.OK);
 
     }

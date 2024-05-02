@@ -1,4 +1,4 @@
-package de.muenchen.rbs.kitafindereai.audit.model;
+package de.muenchen.rbs.kitafindereai.audit.data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -45,14 +45,6 @@ public class AuditRequestResponse {
     @Column
     @Size(max = 255)
     private String resError;
-
-    @Column
-    @Size(max = 255)
-    private String resErrorDetail;
-
-    @Column
-    @Size(max = 255)
-    private String resErrorMessage;
 
     @Column
     @Size(max = 255)

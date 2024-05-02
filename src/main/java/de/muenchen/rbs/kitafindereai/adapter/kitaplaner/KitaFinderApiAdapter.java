@@ -67,6 +67,9 @@ public class KitaFinderApiAdapter {
                 httpRequest,
                 KitafinderExport.class);
         log.debug("Export from kita-planer done.");
+        if (Math.random() <= 0.5) {
+            throw new RuntimeException("Aiaiai");
+        }
 
         return response;
     }

@@ -12,8 +12,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
 
+import de.muenchen.rbs.kitafindereai.audit.data.AuditRequestResponse;
 import de.muenchen.rbs.kitafindereai.audit.data.AuditRequestResponseDataRepository;
-import de.muenchen.rbs.kitafindereai.audit.model.AuditRequestResponse;
 
 public class AuditServiceTest {
 
@@ -35,10 +35,10 @@ public class AuditServiceTest {
 
     @Test
     public void abbreviation() {
-        String above255String = RandomStringUtils.random(267, true, true);
+        String superLongString = RandomStringUtils.random(2670, true, true);
 
-        sut.storeReqResEntrie(above255String, above255String, above255String, above255String, above255String,
-                above255String, above255String, above255String);
+        sut.storeReqResEntrie(superLongString, superLongString, superLongString,
+                superLongString, superLongString, superLongString);
 
         Mockito.verify(repository).save(captor.capture());
 
@@ -49,9 +49,7 @@ public class AuditServiceTest {
         assertEquals(255, entity.getRslvTraeger().length());
         assertEquals(255, entity.getResHttpStatusCode().length());
         assertEquals(255, entity.getResError().length());
-        assertEquals(255, entity.getResErrorDetail().length());
-        assertEquals(255, entity.getResErrorMessage().length());
-        assertEquals(255, entity.getErrorTrace().length());
+        assertEquals(2000, entity.getErrorTrace().length());
 
     }
 
@@ -64,7 +62,7 @@ public class AuditServiceTest {
 
         // Assert that no exception is thrown by the storeReqResEntrie method
         assertDoesNotThrow(() -> sut.storeReqResEntrie("reqKibigWebId", "rslvKitaIdExtern", "rslvTraeger",
-                "resHttoStatusCode", "resError", "resErrorDetail", "resErrorMessage", "errorTrace"));
+                "resHttoStatusCode", "resError", "errorTrace"));
 
         verify(repository).save(any());
 

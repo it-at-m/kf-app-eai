@@ -8,8 +8,6 @@ import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
-import de.muenchen.rbs.kitafindereai.audit.model.AuditRequestResponse;
-
 /**
  * Repository for {@link AuditRequestResponse}.
  * 
