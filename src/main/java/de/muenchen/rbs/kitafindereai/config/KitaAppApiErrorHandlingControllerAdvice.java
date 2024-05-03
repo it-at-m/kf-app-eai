@@ -49,7 +49,7 @@ public class KitaAppApiErrorHandlingControllerAdvice {
                 e.getMessage(),
                 MissingKitaKonfigDataException.DETAILS);
 
-        auditService.storeReqResEntrie(e.getAuditReqRslv().getReqKibigwebId(),
+        auditService.storeReqResEntry(e.getAuditReqRslv().getReqKibigwebId(),
                 e.getAuditReqRslv().getRslvKitaIdExtern(), e.auditReqRslv.getRslvTraeger(),
                 HttpStatus.UNPROCESSABLE_ENTITY.toString(), response.getError(), e.getAuditReqRslv().getErrorTrace());
 
@@ -65,7 +65,7 @@ public class KitaAppApiErrorHandlingControllerAdvice {
                 e.getMessage(),
                 KitafinderException.DETAILS);
 
-        auditService.storeReqResEntrie(e.getAuditReqRslv().getReqKibigwebId(),
+        auditService.storeReqResEntry(e.getAuditReqRslv().getReqKibigwebId(),
                 e.getAuditReqRslv().getRslvKitaIdExtern(), e.auditReqRslv.getRslvTraeger(),
                 HttpStatus.INTERNAL_SERVER_ERROR.toString(), response.getError(), e.getAuditReqRslv().getErrorTrace());
 
@@ -76,7 +76,7 @@ public class KitaAppApiErrorHandlingControllerAdvice {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ExceptionHandler(value = { NoDataException.class })
     void onNoDataExceptionn(NoDataException e) {
-        auditService.storeReqResEntrie(e.getAuditReqRslv().getReqKibigwebId(),
+        auditService.storeReqResEntry(e.getAuditReqRslv().getReqKibigwebId(),
                 e.getAuditReqRslv().getRslvKitaIdExtern(), e.auditReqRslv.getRslvTraeger(),
                 HttpStatus.NO_CONTENT.toString(), NoDataException.class.getSimpleName(),
                 e.getAuditReqRslv().getErrorTrace());
@@ -91,7 +91,7 @@ public class KitaAppApiErrorHandlingControllerAdvice {
 
         Optional<String> kibigWebId = extractUriTemplateVariable(request,
                 KitaAppApiController.PATH_VARIABLE_KIBIG_WEB_ID);
-        auditService.storeReqResEntrie(kibigWebId.orElse(null),
+        auditService.storeReqResEntry(kibigWebId.orElse(null),
                 null, null,
                 HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getClass().getSimpleName(),
                 ExceptionUtils.getStackTrace(e));

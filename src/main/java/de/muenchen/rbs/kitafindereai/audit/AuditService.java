@@ -41,7 +41,7 @@ public class AuditService {
      * @param errorTrace Additional field to store some trace if needed. Should help to trace an
      *            error prior to the logs.
      */
-    public void storeReqResentry(String reqKibigWebId, String rslvKitaIdExtern, String rslvTraeger,
+    public void storeReqResEntry(String reqKibigWebId, String rslvKitaIdExtern, String rslvTraeger,
             String resHttoStatusCode, String resError,
             String errorTrace) {
         try {

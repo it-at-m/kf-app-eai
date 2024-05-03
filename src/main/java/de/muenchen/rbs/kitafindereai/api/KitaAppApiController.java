@@ -71,7 +71,7 @@ public class KitaAppApiController {
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export, Institute.class);
 
-        auditService.storeReqResEntrie(export.getAuditDto().getReqKibigwebId(),
+        auditService.storeReqResEntry(export.getAuditDto().getReqKibigwebId(),
                 export.getAuditDto().getRslvKitaIdExtern(), export.getAuditDto().getRslvTraeger(),
                 HttpStatus.OK.toString(), null, null);
 

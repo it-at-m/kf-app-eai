@@ -37,7 +37,7 @@ public class AuditServiceTest {
     public void abbreviation() {
         String superLongString = RandomStringUtils.random(2670, true, true);
 
-        sut.storeReqResEntrie(superLongString, superLongString, superLongString,
+        sut.storeReqResEntry(superLongString, superLongString, superLongString,
                 superLongString, superLongString, superLongString);
 
         Mockito.verify(repository).save(captor.capture());
