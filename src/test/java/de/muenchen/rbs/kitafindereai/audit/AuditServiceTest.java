@@ -61,7 +61,7 @@ public class AuditServiceTest {
         Mockito.doThrow(new RuntimeException()).when(repository).save(any());
 
         // Assert that no exception is thrown by the storeReqResEntrie method
-        assertDoesNotThrow(() -> sut.storeReqResEntrie("reqKibigWebId", "rslvKitaIdExtern", "rslvTraeger",
+        assertDoesNotThrow(() -> sut.storeReqResEntry("reqKibigWebId", "rslvKitaIdExtern", "rslvTraeger",
                 "resHttoStatusCode", "resError", "errorTrace"));
 
         verify(repository).save(any());
