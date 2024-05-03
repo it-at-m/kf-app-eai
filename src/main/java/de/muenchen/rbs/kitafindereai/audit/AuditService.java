@@ -11,7 +11,7 @@ import de.muenchen.rbs.kitafindereai.audit.data.AuditRequestResponseDataReposito
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Service to store audit entries in the database
+ * Service to store audit entrys in the database
  * {@linkplain AuditRequestResponse}.
  * 
  * @author matthias.karl
@@ -41,19 +41,19 @@ public class AuditService {
      * @param errorTrace Additional field to store some trace if needed. Should help to trace an
      *            error prior to the logs.
      */
-    public void storeReqResEntrie(String reqKibigWebId, String rslvKitaIdExtern, String rslvTraeger,
+    public void storeReqResentry(String reqKibigWebId, String rslvKitaIdExtern, String rslvTraeger,
             String resHttoStatusCode, String resError,
             String errorTrace) {
         try {
-            AuditRequestResponse entrie = new AuditRequestResponse();
-            entrie.setCreatedAt(LocalDateTime.now());
-            entrie.setReqKibigwebId(StringUtils.abbreviate(reqKibigWebId, 255));
-            entrie.setRslvKitaIdExtern(StringUtils.abbreviate(rslvKitaIdExtern, 255));
-            entrie.setRslvTraeger(StringUtils.abbreviate(rslvTraeger, 255));
-            entrie.setResHttpStatusCode(StringUtils.abbreviate(resHttoStatusCode, 255));
-            entrie.setResError(StringUtils.abbreviate(resError, 255));
-            entrie.setErrorTrace(StringUtils.abbreviate(errorTrace, 2000));
-            reqResRepository.save(entrie);
+            AuditRequestResponse entry = new AuditRequestResponse();
+            entry.setCreatedAt(LocalDateTime.now());
+            entry.setReqKibigwebId(StringUtils.abbreviate(reqKibigWebId, 255));
+            entry.setRslvKitaIdExtern(StringUtils.abbreviate(rslvKitaIdExtern, 255));
+            entry.setRslvTraeger(StringUtils.abbreviate(rslvTraeger, 255));
+            entry.setResHttpStatusCode(StringUtils.abbreviate(resHttoStatusCode, 255));
+            entry.setResError(StringUtils.abbreviate(resError, 255));
+            entry.setErrorTrace(StringUtils.abbreviate(errorTrace, 2000));
+            reqResRepository.save(entry);
         } catch (Exception e) {
             log.error(e.toString());
         }
