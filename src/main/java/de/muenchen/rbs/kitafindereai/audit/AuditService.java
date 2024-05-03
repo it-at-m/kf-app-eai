@@ -20,12 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class AuditService {
 
-    private AuditRequestResponseDataRepository reqResRepositroy;
+    private AuditRequestResponseDataRepository reqResRepository;
 
     @Autowired
     public AuditService(AuditRequestResponseDataRepository reqResRepositroy) {
         super();
-        this.reqResRepositroy = reqResRepositroy;
+        this.reqResRepository = reqResRepositroy;
     }
 
     /**
@@ -53,7 +53,7 @@ public class AuditService {
             entrie.setResHttpStatusCode(StringUtils.abbreviate(resHttoStatusCode, 255));
             entrie.setResError(StringUtils.abbreviate(resError, 255));
             entrie.setErrorTrace(StringUtils.abbreviate(errorTrace, 2000));
-            reqResRepositroy.save(entrie);
+            reqResRepository.save(entrie);
         } catch (Exception e) {
             log.error(e.toString());
         }

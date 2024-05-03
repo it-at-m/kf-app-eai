@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
@@ -22,17 +21,21 @@ import org.springframework.web.servlet.HandlerMapping;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.KitafinderException;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.MissingKitaKonfigDataException;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.NoDataException;
+import de.muenchen.rbs.kitafindereai.api.KitaAppApiController;
 import de.muenchen.rbs.kitafindereai.audit.AuditService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * ControllerAdvice for global handling of exceptions.
+ * ControllerAdvice for global handling of exceptions for the Controller
+ * {@linkplain KitaAppApiController}
  *
  * @author m.zollbrecht
  */
-@ControllerAdvice
-public class ApiErrorHandlingControllerAdvice {
+@ControllerAdvice(assignableTypes = { KitaAppApiController.class })
+@Slf4j
+public class KitaAppApiErrorHandlingControllerAdvice {
 
     @Autowired
     AuditService auditService;
@@ -86,7 +89,9 @@ public class ApiErrorHandlingControllerAdvice {
     public ErrorResponse handleAllUncaughtException(
             Exception e, WebRequest request) {
 
-        auditService.storeReqResEntrie(extractUriTemplateVariable(request, "kibigWebId"),
+        Optional<String> kibigWebId = extractUriTemplateVariable(request,
+                KitaAppApiController.PATH_VARIABLE_KIBIG_WEB_ID);
+        auditService.storeReqResEntrie(kibigWebId.orElse(null),
                 null, null,
                 HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getClass().getSimpleName(),
                 ExceptionUtils.getStackTrace(e));
@@ -94,14 +99,23 @@ public class ApiErrorHandlingControllerAdvice {
                 "Bei der Bearbeitung der Anfrage kam es zu einem Unerwarteten Fehler");
     }
 
-    private String extractUriTemplateVariable(WebRequest request, String variable) {
+    /**
+     * Helper to extract UriTemplateVariables out of the request.
+     * 
+     * @param request request that raiesd the error.
+     * @param variableName name of the URITemplateVariable to be extracted
+     * @return Optional with Value of the variable. Empty Optional if variable not present.
+     */
+    private Optional<String> extractUriTemplateVariable(WebRequest request, String variableName) {
         try {
+            @SuppressWarnings("unchecked")
             Map<String, String> paramMap = (Map<String, String>) request
                     .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, WebRequest.SCOPE_REQUEST);
-            String value = paramMap.get(variable);
-            return value;
+            String value = paramMap.get(variableName);
+            return Optional.of(value);
         } catch (Exception e) {
-            return null;
+            log.error(String.format("Could not extract UriTemplateVariable with name: %s", variableName), e);
+            return Optional.empty();
         }
     }
 

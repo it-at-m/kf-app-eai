@@ -14,7 +14,7 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import de.muenchen.rbs.kitafindereai.audit.AuditService;
-import de.muenchen.rbs.kitafindereai.config.ApiErrorHandlingControllerAdvice.ErrorResponse;
+import de.muenchen.rbs.kitafindereai.config.KitaAppApiErrorHandlingControllerAdvice.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @SecurityRequirement(name = "ApiClient")
 @RequestMapping(path = "/kitaApp/v1", produces = "application/json")
 public class KitaAppApiController {
+
+    final public static String PATH_VARIABLE_KIBIG_WEB_ID = "kibigWebId";
 
     @Autowired
     private KitaFinderService kitaFinderService;
@@ -52,18 +54,18 @@ public class KitaAppApiController {
                     @Content(schema = @Schema(implementation = Void.class)) }),
             @ApiResponse(responseCode = "404", description = "not found", content = {
                     @Content(schema = @Schema(implementation = Void.class)) }),
-            @ApiResponse(responseCode = "422", description = "kitafinder error", content = {
+            @ApiResponse(responseCode = "422", description = "unprocessable entity", content = {
                     @Content(schema = @Schema(implementation = ErrorResponse.class)) }),
             @ApiResponse(responseCode = "4XX", description = "Sonstiger Client Fehler (4xx)", content = {
                     @Content(schema = @Schema(implementation = Void.class)) }),
             @ApiResponse(responseCode = "5XX", description = "Server Fehler (5xx)", content = {
-                    @Content(schema = @Schema(implementation = Void.class)) })
+                    @Content(schema = @Schema(implementation = ErrorResponse.class)) })
     })
     @Operation(tags = {
             "kinder" }, summary = "Liefert Kinddaten", description = "Liefert Kinddaten einer Einrichtung anhand der kibigWebId in Gruppen gruppiert.", operationId = "getGroupsWithKidsByKibigwebid")
     @GetMapping("einrichtungen/{kibigWebId}/mitGruppenUndKindern")
     public ResponseEntity<Institute> getGroupsWithKidsByKibigwebid(
-            @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId) {
+            @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable(PATH_VARIABLE_KIBIG_WEB_ID) String kibigWebId) {
         log.info("Endpoint GET einrichtungen/{}/mitGruppenUndKindern called.", kibigWebId);
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);

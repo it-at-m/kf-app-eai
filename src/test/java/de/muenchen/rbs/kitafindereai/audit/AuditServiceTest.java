@@ -55,7 +55,7 @@ public class AuditServiceTest {
 
     @Test
 
-    public void testStoreReqResEntrieException() {
+    public void testStoreRequestResponseEntryException() {
 
         // Mocking an exception to be thrown by the repository
         Mockito.doThrow(new RuntimeException()).when(repository).save(any());

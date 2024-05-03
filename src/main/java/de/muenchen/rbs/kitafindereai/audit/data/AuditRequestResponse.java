@@ -19,7 +19,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-@Table(name = "aud_req_res")
+@Table(name = "aud_kita_app_requests")
 public class AuditRequestResponse {
 
     @Id
