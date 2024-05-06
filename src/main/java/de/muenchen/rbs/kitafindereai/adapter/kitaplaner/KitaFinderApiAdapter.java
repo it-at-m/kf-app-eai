@@ -67,7 +67,6 @@ public class KitaFinderApiAdapter {
                 httpRequest,
                 KitafinderExport.class);
         log.debug("Export from kita-planer done.");
-
         return response;
     }
 

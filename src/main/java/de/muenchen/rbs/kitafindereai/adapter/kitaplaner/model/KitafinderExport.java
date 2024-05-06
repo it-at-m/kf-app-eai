@@ -7,6 +7,7 @@ package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model;
 import java.util.Collection;
 import java.util.Optional;
 
+import de.muenchen.rbs.kitafindereai.audit.model.AuditDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,9 @@ public class KitafinderExport {
     private String fehlermeldung;
     private int anzahlDatensaetze;
     private Collection<KitafinderKind> datensaetze;
+
+    // additional Field to transport auditinformation. Not part of the original kf response
+    private AuditDto auditDto;
 
     public Optional<KitafinderKind> getAnyKind() {
         if (getDatensaetze() != null) {
