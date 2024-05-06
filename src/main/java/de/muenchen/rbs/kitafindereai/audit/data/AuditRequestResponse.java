@@ -47,7 +47,7 @@ public class AuditRequestResponse {
     private String resError;
 
     @Column
-    @Size(max = 255)
+    @Size(max = 2048)
     private String errorTrace;
 
     @Column
