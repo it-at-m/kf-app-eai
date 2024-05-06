@@ -54,6 +54,7 @@ public class SecurityConfiguration {
     }
 
     @Primary
+    @Profile("!no-security")
     @Bean("internalTokenIntrospector")
     public OpaqueTokenIntrospector internalTokenIntrospector(
             @Value("${app.security.introspection-url}") String introspectionUri,
@@ -78,6 +79,7 @@ public class SecurityConfiguration {
     }
 
     @Bean("apiTokenIntrospector")
+    @Profile("!no-security")
     public OpaqueTokenIntrospector apiTokenIntrospector(
             @Value("${app.security.introspection-url}") String introspectionUri,
             @Value("${app.security.api.client-id}") String clientId,

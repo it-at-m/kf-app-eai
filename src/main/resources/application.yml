@@ -27,6 +27,10 @@ app:
     baseUrl: http://kitafinder-plan-k2.muenchen.de
 
 spring:
+  profiles:
+    active: # default profiles
+      - no-security
+  # Spring Data
   application:
     name: kf-app-eai
   flyway:
