@@ -62,7 +62,7 @@ public class KitaAppApiController {
                     @Content(schema = @Schema(implementation = ErrorResponse.class)) })
     })
     @Operation(tags = {
-            "kinder" }, summary = "Liefert Kinddaten", description = "Liefert Kinddaten einer Einrichtung anhand der kibigWebId in Gruppen gruppiert.", operationId = "getGroupsWithKidsByKibigwebid")
+            "kita-app" }, summary = "Liefert Kinddaten", description = "Liefert in Gruppen aufgeteilte Kinddaten einer Einrichtung anhand der kibigWebId.", operationId = "getGroupsWithKidsByKibigwebid")
     @GetMapping("einrichtungen/{kibigWebId}/mitGruppenUndKindern")
     public ResponseEntity<Institute> getGroupsWithKidsByKibigwebid(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable(PATH_VARIABLE_KIBIG_WEB_ID) String kibigWebId) {

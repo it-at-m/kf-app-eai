@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,6 +45,7 @@ public class InternalApiController {
     ModelMapper mapper;
 
     @PostMapping("kitadata/{kibigWebId}")
+    @Operation(tags = { "internal" }, summary = "Setzt die Konfigdaten der EAI für eine kibigWebId.")
     public ResponseEntity<KitafinderKitaKonfigDataReadDto> saveKitafinderKitaKonfig(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId,
             @RequestBody KitafinderKitaKonfigDataWriteDto data) {
@@ -75,6 +77,7 @@ public class InternalApiController {
     }
 
     @GetMapping("kitadata/{kibigWebId}")
+    @Operation(tags = { "internal" }, summary = "Liefert die hinterlegten Konfigdaten der EAI für eine kibigWebId.")
     public ResponseEntity<KitafinderKitaKonfigDataReadDto> getKitafinderKitaKonfig(
             @Parameter(in = ParameterIn.PATH, description = "kibigWebId der Einrichtung für die Kinddaten abgerufen werden", required = true, schema = @Schema(type = "string", description = "KibigwebId 162(für München) - 001 (für Städtisch) - \\d (Art/Form der Einrichtung) - \\d{3} (Nummer der Einrichtung)", example = "1620018207")) @PathVariable("kibigWebId") String kibigWebId) {
         log.info("Endpoint GET kitadata/{} was called. Retrieving the stored data...", kibigWebId);
