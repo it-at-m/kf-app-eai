@@ -19,6 +19,7 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.NoData
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
+import jakarta.validation.Validator;
 
 /**
  * Tests for {@link KitaFinderService}
@@ -30,6 +31,7 @@ class KitafinderServiceTest {
     private KitaFinderApiAdapter adapter;
     private KitafinderKitaKonfigDataRepository repository;
     private TextEncryptor encryptor;
+    private Validator validator;
 
     private KitaFinderService service;
 
@@ -38,8 +40,9 @@ class KitafinderServiceTest {
         adapter = Mockito.mock(KitaFinderApiAdapter.class);
         repository = Mockito.mock(KitafinderKitaKonfigDataRepository.class);
         encryptor = Mockito.mock(TextEncryptor.class);
+        validator = Mockito.mock(Validator.class);
 
-        service = new KitaFinderService(adapter, repository, encryptor);
+        service = new KitaFinderService(adapter, repository, encryptor, validator);
     }
 
     @Test
@@ -64,7 +67,7 @@ class KitafinderServiceTest {
         Mockito.when(encryptor.decrypt(kitaKonfig.getPassword())).thenReturn("testpw");
 
         assertThrows(NoDataException.class, () -> service.exportKitaData(kibigwebid));
-
+        
         Mockito.verify(encryptor, Mockito.times(1)).decrypt(kitaKonfig.getPassword());
         Mockito.verify(repository, Mockito.times(1)).findById(kibigwebid);
         Mockito.verify(adapter, Mockito.times(1)).exportKitaData(kitaKonfig.getTraeger(), kitaKonfig.getKitaIdExtern(), "testpw");
@@ -127,6 +130,7 @@ class KitafinderServiceTest {
 
         KitafinderExport result = service.exportKitaData(kibigwebid);
 
+        Mockito.verify(validator, Mockito.times(1)).validate(export);
         Mockito.verify(encryptor, Mockito.times(1)).decrypt(kitaKonfig.getPassword());
         Mockito.verify(repository, Mockito.times(1)).findById(kibigwebid);
         Mockito.verify(adapter, Mockito.times(1)).exportKitaData(kitaKonfig.getTraeger(), kitaKonfig.getKitaIdExtern(), "testpw");

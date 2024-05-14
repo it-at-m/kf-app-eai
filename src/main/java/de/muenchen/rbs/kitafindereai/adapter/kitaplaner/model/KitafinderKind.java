@@ -25,8 +25,8 @@ public class KitafinderKind {
     
     @NotNull
     @JsonProperty("KIND_VORNAME")
-    @NotNull
     private String kindVorname;
+    @NotNull
     @JsonProperty("KIND_NACHNAME")
     private String kindNachname;
     @JsonProperty("KIND_GEBDATUM")

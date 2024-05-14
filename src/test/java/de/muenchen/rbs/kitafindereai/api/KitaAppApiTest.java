@@ -67,8 +67,12 @@ class KitaAppApiTest {
         KitafinderKind kind = new KitafinderKind();
         kind.setKindVorname("vorname");
         kind.setKindNachname("nachname");
+        kind.setKindIdExtern("idExtern");
         kind.setKitaIdExtern("idExtern");
         kind.setKitaKitaname("kitaname");
+        kind.setSb1Nachname("sb1vorname");
+        kind.setSb1Vorname("sb1nachname");
+        kind.setVerGruppeId("gruppenid");
         KitafinderExport exportData = new KitafinderExport(0, "ok", null, 1, List.of(kind), null);
         ResponseEntity<KitafinderExport> adapterResponse = ResponseEntity.ok(exportData);
         Mockito.when(kitaFinderApiAdapter.exportKitaData(dto.getTraeger(), dto.getKitaIdExtern(), dto.getPassword()))
