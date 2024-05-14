@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.modelmapper.Converter;
@@ -55,12 +56,9 @@ public class ModelMapperConfiguration {
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
                 export.getDatensaetze().stream().forEach(kind -> {
-                    String originalGroupId = kind.getVerGruppeId();
-                    String groupId = (originalGroupId == null || originalGroupId.length() == 0)
-                            ? kind.getVerGruppe()
-                            : originalGroupId;
+                    String groupId = kind.getVerGruppeId();
 
-                    Optional<Group> group = groups.stream().filter(g -> g.getGroupId().equals(groupId)).findAny();
+                    Optional<Group> group = groups.stream().filter(g -> Objects.equals(groupId, g.getGroupId())).findAny();
                     if (group.isEmpty()) {
                         // Group is not present yet.
                         groups.add(new Group(groupId, kind.getVerGruppe(),

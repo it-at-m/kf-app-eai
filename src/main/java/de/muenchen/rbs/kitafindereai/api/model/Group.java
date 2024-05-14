@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class Group {
     // Kitafinder-Column [VER_GRUPPE]
     private String name;
     
+    @Valid
     private Collection<Child> children = new ArrayList<>();
 
 }

@@ -4,6 +4,8 @@
  */
 package de.muenchen.rbs.kitafindereai.config;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.HandlerMapping;
 
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.KitafinderException;
+import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.KitafinderValidationException;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.MissingKitaKonfigDataException;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.KitaFinderService.NoDataException;
 import de.muenchen.rbs.kitafindereai.api.KitaAppApiController;
@@ -52,6 +55,27 @@ public class KitaAppApiErrorHandlingControllerAdvice {
         auditService.storeReqResEntry(e.getAuditReqRslv().getReqKibigwebId(),
                 e.getAuditReqRslv().getRslvKitaIdExtern(), e.auditReqRslv.getRslvTraeger(),
                 HttpStatus.UNPROCESSABLE_ENTITY.toString(), response.getError(), e.getAuditReqRslv().getErrorTrace());
+
+        return response;
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(value = { KitafinderValidationException.class })
+    ErrorResponse onConstraintViolationException(KitafinderValidationException e) {
+
+        ErrorResponse response = new ErrorResponse(KitafinderValidationException.class.getSimpleName(),
+                KitafinderValidationException.DETAILS,
+                KitafinderValidationException.DETAILS);
+        
+        // get stacktrace as string
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        String exceptionAsString = sw.toString();
+
+        auditService.storeReqResEntry(e.getAuditReqRslv().getReqKibigwebId(),
+                e.getAuditReqRslv().getRslvKitaIdExtern(), e.auditReqRslv.getRslvTraeger(),
+                HttpStatus.UNPROCESSABLE_ENTITY.toString(), response.getError(), exceptionAsString);
 
         return response;
     }
@@ -91,6 +115,7 @@ public class KitaAppApiErrorHandlingControllerAdvice {
 
         Optional<String> kibigWebId = extractUriTemplateVariable(request,
                 KitaAppApiController.PATH_VARIABLE_KIBIG_WEB_ID);
+        e.printStackTrace();
         auditService.storeReqResEntry(kibigWebId.orElse(null),
                 null, null,
                 HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getClass().getSimpleName(),

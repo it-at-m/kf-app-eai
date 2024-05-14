@@ -6,6 +6,7 @@ package de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,9 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class KitafinderKind {
     
+    @NotNull
     @JsonProperty("KIND_VORNAME")
+    @NotNull
     private String kindVorname;
     @JsonProperty("KIND_NACHNAME")
     private String kindNachname;
@@ -36,6 +39,7 @@ public class KitafinderKind {
     private String kindFamiliensprache;
     @JsonProperty("KIND_KONFESSION")
     private String kindKonfession;
+    @NotNull
     @JsonProperty("KIND_ID_EXTERN")
     private String kindIdExtern;
     @JsonProperty("KIND_ID_BEWERBUNG")
@@ -44,9 +48,11 @@ public class KitafinderKind {
     private String kindIdBewerbungsmappe;
     @JsonProperty("KIND_ID_KINDMAPPE")
     private String kindIdKindmappe;
-    
+
+    @NotNull
     @JsonProperty("SB1_VORNAME")
     private String sb1Vorname;
+    @NotNull
     @JsonProperty("SB1_NACHNAME")
     private String sb1Nachname;
     @JsonProperty("SB1_GEBDATUM")
@@ -99,8 +105,10 @@ public class KitafinderKind {
     private String sb2Email;
     @JsonProperty("KITA_ID")
     private String kitaId;
+    @NotNull
     @JsonProperty("KITA_ID_EXTERN")
     private String kitaIdExtern;
+    @NotNull
     @JsonProperty("KITA_KITANAME")
     private String kitaKitaname;
     @JsonProperty("KITA_KITAANSCHRIFT")
@@ -150,6 +158,7 @@ public class KitafinderKind {
     private String abwOrt;
     @JsonProperty("ABW_LAND")
     private String abwLand;
+    @NotNull
     @JsonProperty("VER_GRUPPE_ID")
     private String verGruppeId;
     @JsonProperty("VER_GRUPPE_AB")

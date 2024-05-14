@@ -4,6 +4,8 @@
  */
 package de.muenchen.rbs.kitafindereai.adapter.kitaplaner;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfi
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.audit.model.AuditDto;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +44,9 @@ public class KitaFinderService {
 
     @Autowired
     private TextEncryptor encryptor;
+
+    @Autowired
+    private Validator validator;
 
     public KitafinderExport exportKitaData(String kibigwebId)
             throws MissingKitaKonfigDataException, KitafinderException {
@@ -66,6 +74,11 @@ public class KitaFinderService {
             if (response.getBody() != null && response.getBody().getStatus() == 0) {
                 if (response.getBody().getAnzahlDatensaetze() > 0) {
                     KitafinderExport kitafinderExport = response.getBody();
+                    Set<ConstraintViolation<KitafinderExport>> violations = validator.validate(kitafinderExport);
+                    if (violations.size() > 0) {
+                        throw new KitafinderValidationException(violations, auditInfo);
+                    }
+
                     kitafinderExport.setAuditDto(auditInfo);
                     return kitafinderExport;
                 } else {
@@ -84,11 +97,29 @@ public class KitaFinderService {
     }
 
     /**
+     * Exception for missing kitaplaner data that stops us from providing our desired response.
+     */
+    @Getter
+    public static class KitafinderValidationException extends ConstraintViolationException {
+        private static final long serialVersionUID = 8425994162414148989L;
+
+        public static String DETAILS = "Die Antwort des Kitafinders entspricht nicht der geforderten Format oder enthält nicht alle benötigten Daten.";
+        public AuditDto auditReqRslv;
+
+        public KitafinderValidationException(Set<ConstraintViolation<KitafinderExport>> constraintViolations,
+                AuditDto auditReqRslv) {
+            super(constraintViolations);
+            this.auditReqRslv = auditReqRslv;
+        }
+
+    }
+
+    /**
      * Exception for missing config data, that makes calls requesting a specific kibigwebid
      * impossible.
      */
     @Getter
-    public class MissingKitaKonfigDataException extends RuntimeException {
+    public static class MissingKitaKonfigDataException extends RuntimeException {
         private static final long serialVersionUID = 8425994162414148989L;
 
         public static String DETAILS = "Es sind in der Komponente kita-finder-eai keine Daten zu der übergebenen kibigwebid hinterlegt. Für diese Kibigwebid können daher keine Daten geliefert werden.";
@@ -105,7 +136,7 @@ public class KitaFinderService {
      * Exception for errors when calling or interpreting kitafinder data.
      */
     @Getter
-    public class KitafinderException extends RuntimeException {
+    public static class KitafinderException extends RuntimeException {
         private static final long serialVersionUID = 1251395732301276870L;
 
         public static String DETAILS = "Beim Aufruf des Kitafinders ist ein Fehler aufgetreten.";
@@ -121,7 +152,7 @@ public class KitaFinderService {
      * Exception for empty kitafinder data.
      */
     @Getter
-    public class NoDataException extends RuntimeException {
+    public static class NoDataException extends RuntimeException {
         private static final long serialVersionUID = -7755165370313373931L;
 
         public static String DETAILS = "Die Antwort des Kitafinders enthält keine Daten.";

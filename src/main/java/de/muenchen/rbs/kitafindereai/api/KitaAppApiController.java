@@ -1,5 +1,7 @@
 package de.muenchen.rbs.kitafindereai.api;
 
+import java.util.Set;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -42,6 +47,9 @@ public class KitaAppApiController {
 
     @Autowired
     private AuditService auditService;
+    
+    @Autowired
+    private Validator validator;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
@@ -70,6 +78,11 @@ public class KitaAppApiController {
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export, Institute.class);
+        
+        Set<ConstraintViolation<Institute>> validationErrors = validator.validate(institute);
+        if (validationErrors.size() > 0) {
+            throw new ConstraintViolationException(validationErrors);
+        }
 
         auditService.storeReqResEntry(export.getAuditDto().getReqKibigwebId(),
                 export.getAuditDto().getRslvKitaIdExtern(), export.getAuditDto().getRslvTraeger(),

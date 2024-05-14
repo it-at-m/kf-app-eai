@@ -3,6 +3,7 @@ package de.muenchen.rbs.kitafindereai.api.model;
 import java.util.Collection;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Institute   {
     // Kitafinder-Column [KITA_KITANAME]
     private String instituteName;
     
+    @Valid
     private Collection<Group> groups;
   
 }
