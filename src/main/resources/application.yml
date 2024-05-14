@@ -25,6 +25,7 @@ app:
       salt: 2c82deb3e67b0da1
   kitafinderAdapter:
     baseUrl: http://kitafinder-plan-k2.muenchen.de
+    exportRelativeUrl: /kitaplaner/api/schnittstelle/export
 
 spring:
   profiles:

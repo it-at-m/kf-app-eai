@@ -60,6 +60,11 @@
     "description": "URL der Kita-Planer Umgebung, von der die Daten abgefragt werden sollen."
   },
   {
+    "name": "app.kitafinderAdapter.export-relative-url",
+    "type": "java.lang.String",
+    "description": "URL des Export-Endpunktes am Kitaplaner."
+  },
+  {
     "name": "app.db.url",
     "type": "java.lang.String",
     "description": "URL der Datenbank."
