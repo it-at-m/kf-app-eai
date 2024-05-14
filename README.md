@@ -12,17 +12,34 @@ This project is built with the following technologies:
 
 ## Roadmap
 
-![Under construction](https://www.pngplay.com/wp-content/uploads/6/Under-Construction-Icon-PNG.png)
-
 *This project is currently being developed.*
 
 See the [open issues](#) for a full list of proposed features (and known issues).
 
 ## Set up
-*how can i start and fly this project*
+
+### Running locally
+
+Build the application by using `mvn install`
+
+The resulting JAR-File can be run using `java -jar <path_to_the_jar_file>`
+
+### Deploying to Kubernetes
+
+Alternatively the following [Helm-chart](https://github.com/it-at-m/helm-charts/tree/main/charts/kf-app-eai) can be used to deploy to Kubernetes.
+
+```
+helm repo add it-at-m https://it-at-m.github.io/helm-charts
+helm upgrade --install kf-app-eai-test it-at-m/kf-app-eai --version 0.1.0
+```
 
 ## Documentation
-*what insights do you have to tell*
+
+### Configuration
+
+For this application to work as intended it needs to be connected to a Kitafinder-instance. This can be done by providing `app.kitafinderAdapter.baseUrl`.
+
+To enable security on the api provide configuration to values starting with `app.security`. You can provide the OAuth server and two seperate OAuth clients for the internal and public API.
 
 ## Contributing
 
