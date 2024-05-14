@@ -14,7 +14,9 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfi
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.audit.model.AuditDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class KitaFinderService {
 
     @Autowired

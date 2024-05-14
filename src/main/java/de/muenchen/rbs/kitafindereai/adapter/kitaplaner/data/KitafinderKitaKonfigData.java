@@ -12,7 +12,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Stored data for {@link Institute}s. Used for calls to kitafinder.
@@ -22,6 +24,8 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "kita_data")
+@AllArgsConstructor
+@NoArgsConstructor
 public class KitafinderKitaKonfigData {
 
     @Id
