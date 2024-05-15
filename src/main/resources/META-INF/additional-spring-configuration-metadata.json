@@ -20,24 +20,14 @@
     "description": "SSO-Realm."
   },
   {
-    "name": "app.security.api.client-id",
+    "name": "app.security.client-id",
     "type": "java.lang.String",
     "description": "client-id für die Authentifizierung"
   },
   {
-    "name": "app.security.api.client-secret",
+    "name": "app.security.roleClaimName",
     "type": "java.lang.String",
-    "description": "client-secret für die Authentifizierung"
-  },
-  {
-    "name": "app.security.internal.client-id",
-    "type": "java.lang.String",
-    "description": "client-id für die Authentifizierung"
-  },
-  {
-    "name": "app.security.internal.client-secret",
-    "type": "java.lang.String",
-    "description": "client-secret für die Authentifizierung"
+    "description": "Name des claims in dem die Rollen stehen."
   },
   {
     "name": "app.security.token-url",

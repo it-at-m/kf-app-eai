@@ -10,10 +10,8 @@ app:
     authorization-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/auth
     token-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token
     issuer-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}
-    api:
-      client-id: instikom-kf-schnittstelle
-    internal:
-      client-id: kf-app-eai-internal
+    client-id: kf-app-eai
+    roleClaimName: kf-eai-roles
   passwordEncoder:
     # Encryption properties. Overwrite in non-dev-environments!
     encryptor:

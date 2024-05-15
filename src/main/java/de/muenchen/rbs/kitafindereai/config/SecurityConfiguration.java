@@ -6,7 +6,6 @@ package de.muenchen.rbs.kitafindereai.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +23,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
@@ -52,7 +53,7 @@ public class SecurityConfiguration {
     @Order(1)
     @Profile("!no-security")
     public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http,
-            @Qualifier("internalDecoder") JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder) throws Exception {
         http.securityMatcher("/internal/**")
                 .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
@@ -66,7 +67,7 @@ public class SecurityConfiguration {
     @Order(2)
     @Profile("!no-security")
     public SecurityFilterChain kitaAppApiSecurityFilterChain(HttpSecurity http,
-            @Qualifier("apiDecoder") JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder) throws Exception {
         http.securityMatcher("/kitaApp/**")
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated())
@@ -84,7 +85,7 @@ public class SecurityConfiguration {
     @Order(3)
     @Profile("!no-security")
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
-            @Qualifier("internalDecoder") JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/actuator/info", "/actuator/health/**",
                         "/swagger-ui/**", "/v3/api-docs/**")
@@ -96,25 +97,23 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean("apiDecoder")
+    @Bean
     @Profile("!no-security")
-    JwtDecoder apiJwtDecoder(@Value("${app.security.issuer-url}") String issuerUri,
-            @Value("${app.security.api.client-id}") String requiredAudience) {
-        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
+    public JwtAuthenticationConverter jwtAuthenticationConverter(
+            @Value("app.security.roleClaimName") String roleClaimName) {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthoritiesClaimName(roleClaimName);
+        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
-        OAuth2TokenValidator<Jwt> audienceValidator = audienceValidator(requiredAudience);
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-        jwtDecoder.setJwtValidator(withAudience);
-
-        return jwtDecoder;
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
     }
 
-    @Bean("internalDecoder")
+    @Bean
     @Profile("!no-security")
-    JwtDecoder internalJwtDecoder(@Value("${app.security.issuer-url}") String issuerUri,
-            @Value("${app.security.internal.client-id}") String requiredAudience) {
+    JwtDecoder jwtDecoder(@Value("${app.security.issuer-url}") String issuerUri,
+            @Value("${app.security.client-id}") String requiredAudience) {
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = audienceValidator(requiredAudience);
