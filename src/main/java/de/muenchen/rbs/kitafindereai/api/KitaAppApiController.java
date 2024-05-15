@@ -47,7 +47,7 @@ public class KitaAppApiController {
 
     @Autowired
     private AuditService auditService;
-    
+
     @Autowired
     private Validator validator;
 
@@ -78,7 +78,7 @@ public class KitaAppApiController {
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export, Institute.class);
-        
+
         Set<ConstraintViolation<Institute>> validationErrors = validator.validate(institute);
         if (validationErrors.size() > 0) {
             throw new ConstraintViolationException(validationErrors);

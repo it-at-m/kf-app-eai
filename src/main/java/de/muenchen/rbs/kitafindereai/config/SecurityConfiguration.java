@@ -4,20 +4,26 @@
  */
 package de.muenchen.rbs.kitafindereai.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
-import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
-import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimValidator;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
@@ -39,28 +45,20 @@ import lombok.extern.slf4j.Slf4j;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
+    private static final String AUD_CLAIM = "aud";
+
     /** Security for {@link InternalApiController} */
     @Bean
     @Order(1)
     @Profile("!no-security")
     public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http,
-            @Qualifier("internalTokenIntrospector") OpaqueTokenIntrospector introspector) throws Exception {
+            @Qualifier("internalDecoder") JwtDecoder decoder) throws Exception {
         http.securityMatcher("/internal/**")
                 .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .opaqueToken(config -> config.introspector(introspector)));
+                        .jwt(jwt -> jwt.decoder(decoder)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
-    }
-
-    @Primary
-    @Profile("!no-security")
-    @Bean("internalTokenIntrospector")
-    public OpaqueTokenIntrospector internalTokenIntrospector(
-            @Value("${app.security.introspection-url}") String introspectionUri,
-            @Value("${app.security.internal.client-id}") String clientId,
-            @Value("${app.security.internal.client-secret}") String clientSecret) {
-        return new CustomAuthoritiesOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
     }
 
     /** Security for {@link KitaAppApiController} */
@@ -68,23 +66,14 @@ public class SecurityConfiguration {
     @Order(2)
     @Profile("!no-security")
     public SecurityFilterChain kitaAppApiSecurityFilterChain(HttpSecurity http,
-            @Qualifier("apiTokenIntrospector") OpaqueTokenIntrospector introspector) throws Exception {
+            @Qualifier("apiDecoder") JwtDecoder decoder) throws Exception {
         http.securityMatcher("/kitaApp/**")
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .opaqueToken(config -> config.introspector(introspector)));
+                        .jwt(jwt -> jwt.decoder(decoder)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
-    }
-
-    @Bean("apiTokenIntrospector")
-    @Profile("!no-security")
-    public OpaqueTokenIntrospector apiTokenIntrospector(
-            @Value("${app.security.introspection-url}") String introspectionUri,
-            @Value("${app.security.api.client-id}") String clientId,
-            @Value("${app.security.api.client-secret}") String clientSecret) {
-        return new SpringOpaqueTokenIntrospector(introspectionUri, clientId, clientSecret);
     }
 
     /**
@@ -94,16 +83,51 @@ public class SecurityConfiguration {
     @Bean
     @Order(3)
     @Profile("!no-security")
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
+            @Qualifier("internalDecoder") JwtDecoder decoder) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/actuator/info", "/actuator/health/**",
                         "/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .opaqueToken(Customizer.withDefaults()));
+                        .jwt(jwt -> jwt.decoder(decoder)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
+    }
+
+    @Bean("apiDecoder")
+    @Profile("!no-security")
+    JwtDecoder apiJwtDecoder(@Value("${app.security.issuer-url}") String issuerUri,
+            @Value("${app.security.api.client-id}") String requiredAudience) {
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator<Jwt> audienceValidator = audienceValidator(requiredAudience);
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+
+    @Bean("internalDecoder")
+    @Profile("!no-security")
+    JwtDecoder internalJwtDecoder(@Value("${app.security.issuer-url}") String issuerUri,
+            @Value("${app.security.internal.client-id}") String requiredAudience) {
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
+
+        OAuth2TokenValidator<Jwt> audienceValidator = audienceValidator(requiredAudience);
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+        jwtDecoder.setJwtValidator(withAudience);
+
+        return jwtDecoder;
+    }
+
+    OAuth2TokenValidator<Jwt> audienceValidator(String requiredAudience) {
+        return new JwtClaimValidator<List<String>>(AUD_CLAIM, aud -> aud.contains(requiredAudience));
     }
 
     /** Security-config for profile 'no-security' */

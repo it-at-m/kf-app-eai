@@ -7,17 +7,13 @@ app:
   security:
     sso-base-url: https://ssodev.muenchen.de
     realm: A23
-    introspection-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token/introspect
     authorization-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/auth
     token-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token
+    issuer-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}
     api:
       client-id: instikom-kf-schnittstelle
-      # app.security.client-secret: required for oauth authentication to work.
-      # Add in programm arguments or environment
     internal:
       client-id: kf-app-eai-internal
-      # app.security.client-secret: required for oauth authentication to work.
-      # Add in programm arguments or environment
   passwordEncoder:
     # Encryption properties. Overwrite in non-dev-environments!
     encryptor:

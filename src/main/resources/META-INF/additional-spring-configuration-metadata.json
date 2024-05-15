@@ -50,9 +50,9 @@
     "description": "URL zur Authentifizierung am OAuth-Server."
   },
   {
-    "name": "app.security.introspection-url",
+    "name": "app.security.issuer-url",
     "type": "java.lang.String",
-    "description": "URL für die Introspection der Token."
+    "description": "Issuer-URL des OAuth-Servers."
   },
   {
     "name": "app.kitafinderAdapter.base-url",
