@@ -24,7 +24,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
@@ -53,11 +52,13 @@ public class SecurityConfiguration {
     @Order(1)
     @Profile("!no-security")
     public SecurityFilterChain internalApiSecurityFilterChain(HttpSecurity http,
-            JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder, JwtAuthenticationConverter authConverter) throws Exception {
         http.securityMatcher("/internal/**")
                 .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .jwt(jwt -> jwt.decoder(decoder)));
+                        .jwt(jwt -> jwt
+                                .decoder(decoder)
+                                .jwtAuthenticationConverter(authConverter)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
     }
@@ -67,12 +68,14 @@ public class SecurityConfiguration {
     @Order(2)
     @Profile("!no-security")
     public SecurityFilterChain kitaAppApiSecurityFilterChain(HttpSecurity http,
-            JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder, JwtAuthenticationConverter authConverter) throws Exception {
         http.securityMatcher("/kitaApp/**")
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .jwt(jwt -> jwt.decoder(decoder)));
+                        .jwt(jwt -> jwt
+                                .decoder(decoder)
+                                .jwtAuthenticationConverter(authConverter)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
     }
@@ -85,28 +88,25 @@ public class SecurityConfiguration {
     @Order(3)
     @Profile("!no-security")
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
-            JwtDecoder decoder) throws Exception {
+            JwtDecoder decoder, JwtAuthenticationConverter authConverter) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/actuator/info", "/actuator/health/**",
                         "/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
-                        .jwt(jwt -> jwt.decoder(decoder)));
+                        .jwt(jwt -> jwt
+                                .decoder(decoder)
+                                .jwtAuthenticationConverter(authConverter)));
         http.cors(cors -> cors.disable()).csrf(csrf -> csrf.disable());
         return http.build();
     }
 
     @Bean
     @Profile("!no-security")
-    public JwtAuthenticationConverter jwtAuthenticationConverter(
-            @Value("app.security.roleClaimName") String roleClaimName) {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthoritiesClaimName(roleClaimName);
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthoritiesConverter());
         return jwtAuthenticationConverter;
     }
 

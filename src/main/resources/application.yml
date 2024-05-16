@@ -11,7 +11,6 @@ app:
     token-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}/protocol/openid-connect/token
     issuer-url: ${app.security.sso-base-url}/auth/realms/${app.security.realm}
     client-id: kf-app-eai
-    roleClaimName: kf-eai-roles
   passwordEncoder:
     # Encryption properties. Overwrite in non-dev-environments!
     encryptor:
@@ -42,11 +41,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     oauth:
-      clientId: ${app.security.api.client-id}
       realm: ${app.security.realm}
       appName: ${spring.application.name}
       scopes:
-      - email
+      - LHM_Extended
   default-produces-media-type: application/json
   
 server:
