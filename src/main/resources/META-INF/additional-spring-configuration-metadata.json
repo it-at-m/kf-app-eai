@@ -25,11 +25,6 @@
     "description": "client-id für die Authentifizierung"
   },
   {
-    "name": "app.security.roleClaimName",
-    "type": "java.lang.String",
-    "description": "Name des claims in dem die Rollen stehen."
-  },
-  {
     "name": "app.security.token-url",
     "type": "java.lang.String",
     "description": "URL, an der die Oauth2 Tokens abgefragt werden."
