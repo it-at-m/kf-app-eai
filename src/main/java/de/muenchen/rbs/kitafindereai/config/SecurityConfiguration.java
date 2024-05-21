@@ -29,6 +29,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
 import de.muenchen.rbs.kitafindereai.api.KitaAppApiController;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import io.swagger.v3.oas.annotations.security.OAuthFlows;
 import io.swagger.v3.oas.annotations.security.OAuthScope;
@@ -151,10 +153,8 @@ public class SecurityConfiguration {
     @Profile("!no-security")
     @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}", scopes = {
             @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_ROLES) })))
-    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}", scopes = {
-            @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_ROLES),
-            @OAuthScope(name = SCOPE_OPENID) })))
-
+    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, extensions = @Extension(properties = @ExtensionProperty(name = "tokenName", value = "id_token")), flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}", scopes = {
+            @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_OPENID) })))
     public class SpringdocConfig {
     }
 
