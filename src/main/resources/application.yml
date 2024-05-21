@@ -43,6 +43,10 @@ springdoc:
     oauth:
       realm: ${app.security.realm}
       appName: ${spring.application.name}
+      scopes:
+      - LHM_Extended
+      - roles
+      - openid
   default-produces-media-type: application/json
   
 server:
