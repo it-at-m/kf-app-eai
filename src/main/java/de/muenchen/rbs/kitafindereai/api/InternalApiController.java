@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @PreAuthorize("@environment.acceptsProfiles('no-security') || hasAuthority('ROLE_internal-access')")
 @SecurityRequirement(name = "InternalLogin", scopes = { SecurityConfiguration.SCOPE_LHM_EXTENDED,
-        SecurityConfiguration.SCOPE_ROLES, SecurityConfiguration.SCOPE_OPENID })
+        SecurityConfiguration.SCOPE_OPENID })
 @RequestMapping(path = "/internal/", produces = "application/json")
 public class InternalApiController {
 
