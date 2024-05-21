@@ -29,8 +29,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import de.muenchen.rbs.kitafindereai.api.InternalApiController;
 import de.muenchen.rbs.kitafindereai.api.KitaAppApiController;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import io.swagger.v3.oas.annotations.security.OAuthFlows;
+import io.swagger.v3.oas.annotations.security.OAuthScope;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,6 +49,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SecurityConfiguration {
 
     private static final String AUD_CLAIM = "aud";
+
+    public static final String SCOPE_LHM_EXTENDED = "LHM_Extended";
+    public static final String SCOPE_ROLES = "roles";
+    public static final String SCOPE_OPENID = "openid";
 
     /** Security for {@link InternalApiController} */
     @Bean
@@ -144,8 +151,10 @@ public class SecurityConfiguration {
     /** Swagger-API config for security */
     @Configuration
     @Profile("!no-security")
-    @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}")))
-    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}")))
+    @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}", scopes = {
+            @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_ROLES) })))
+    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, extensions = @Extension(properties = @ExtensionProperty(name = "tokenName", value = "id_token")), flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}", scopes = {
+            @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_OPENID) })))
     public class SpringdocConfig {
     }
 

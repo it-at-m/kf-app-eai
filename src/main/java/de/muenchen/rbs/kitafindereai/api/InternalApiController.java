@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigData;
 import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.data.KitafinderKitaKonfigDataRepository;
+import de.muenchen.rbs.kitafindereai.config.SecurityConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @RestController
 @PreAuthorize("@environment.acceptsProfiles('no-security') || hasAuthority('ROLE_internal-access')")
-@SecurityRequirement(name = "InternalLogin")
+@SecurityRequirement(name = "InternalLogin", scopes = { SecurityConfiguration.SCOPE_LHM_EXTENDED,
+        SecurityConfiguration.SCOPE_OPENID })
 @RequestMapping(path = "/internal/", produces = "application/json")
 public class InternalApiController {
 

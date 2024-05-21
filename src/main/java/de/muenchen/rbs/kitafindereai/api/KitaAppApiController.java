@@ -18,6 +18,7 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import de.muenchen.rbs.kitafindereai.audit.AuditService;
 import de.muenchen.rbs.kitafindereai.config.KitaAppApiErrorHandlingControllerAdvice.ErrorResponse;
+import de.muenchen.rbs.kitafindereai.config.SecurityConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -35,7 +36,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @RestController
 @PreAuthorize("@environment.acceptsProfiles('no-security') || hasAuthority('ROLE_api-access')")
-@SecurityRequirement(name = "ApiClient")
+@SecurityRequirement(name = "ApiClient", scopes = { SecurityConfiguration.SCOPE_LHM_EXTENDED,
+        SecurityConfiguration.SCOPE_ROLES })
 @RequestMapping(path = "/kitaApp/v1", produces = "application/json")
 public class KitaAppApiController {
 
