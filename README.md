@@ -1,6 +1,6 @@
 # Kitafinder-KitaApp-EAI
 
-*Dieses Enterprise Application Interface bietet eine Schnittstelle für die Kita-App an, über die Daten vom Kitafinder abgefragt werden können.*
+*This Enterprise Application Interface provides access to some data of Munichs [Kitafinder](https://www.netgo.de/produkte/kita-planer) to Munichs [Kita-App](https://kikom-kita-app.de/)*
 
 ### Built With
 
