@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @author m.zollbrecht
  */
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles({ "test", "no-security" })
 class PasswordEncoderTest {
 
     @Autowired

@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import de.muenchen.rbs.kitafindereai.adapter.kitaplaner.model.KitafinderExport;
 import de.muenchen.rbs.kitafindereai.api.model.Institute;
 import de.muenchen.rbs.kitafindereai.audit.AuditService;
 import de.muenchen.rbs.kitafindereai.config.KitaAppApiErrorHandlingControllerAdvice.ErrorResponse;
+import de.muenchen.rbs.kitafindereai.config.SecurityConfiguration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -33,7 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin
 @RestController
-@SecurityRequirement(name = "ApiClient")
+@PreAuthorize("@environment.acceptsProfiles('no-security') || hasAuthority('ROLE_api-access')")
+@SecurityRequirement(name = "ApiClient", scopes = { SecurityConfiguration.SCOPE_LHM_EXTENDED,
+        SecurityConfiguration.SCOPE_ROLES })
 @RequestMapping(path = "/kitaApp/v1", produces = "application/json")
 public class KitaAppApiController {
 
@@ -47,7 +51,7 @@ public class KitaAppApiController {
 
     @Autowired
     private AuditService auditService;
-    
+
     @Autowired
     private Validator validator;
 
@@ -78,7 +82,7 @@ public class KitaAppApiController {
 
         KitafinderExport export = kitaFinderService.exportKitaData(kibigWebId);
         Institute institute = mapper.map(export, Institute.class);
-        
+
         Set<ConstraintViolation<Institute>> validationErrors = validator.validate(institute);
         if (validationErrors.size() > 0) {
             throw new ConstraintViolationException(validationErrors);

@@ -20,24 +20,9 @@
     "description": "SSO-Realm."
   },
   {
-    "name": "app.security.api.client-id",
+    "name": "app.security.client-id",
     "type": "java.lang.String",
     "description": "client-id für die Authentifizierung"
-  },
-  {
-    "name": "app.security.api.client-secret",
-    "type": "java.lang.String",
-    "description": "client-secret für die Authentifizierung"
-  },
-  {
-    "name": "app.security.internal.client-id",
-    "type": "java.lang.String",
-    "description": "client-id für die Authentifizierung"
-  },
-  {
-    "name": "app.security.internal.client-secret",
-    "type": "java.lang.String",
-    "description": "client-secret für die Authentifizierung"
   },
   {
     "name": "app.security.token-url",
@@ -50,9 +35,9 @@
     "description": "URL zur Authentifizierung am OAuth-Server."
   },
   {
-    "name": "app.security.introspection-url",
+    "name": "app.security.issuer-url",
     "type": "java.lang.String",
-    "description": "URL für die Introspection der Token."
+    "description": "Issuer-URL des OAuth-Servers."
   },
   {
     "name": "app.kitafinderAdapter.base-url",

@@ -23,7 +23,7 @@ public class Child   {
     @NotNull
     @Size(max = 25)
     @Schema(example = "Stark", description = "Dieses Feld wird bei Bewerbungen vom erfassenden System, also vom Kita-Planer 2 selbst, vergeben und zur eindeutigen Identifizierung der Bewerbung/des Vertrags genutzt.Es handelt sich NICHT um eine ID des physischen Kindes. Die KIND_ID_EXTERN ist eindeutig für das Tripel: Kind, Bewerbungsprozess, Kita. Pro Kita und Bewerbungsprozess (z.B. andere Altersgruppe) gibt es also für das gleiche physische Kind eine unterschiedliche externe ID.")
-    // Kitafinder-Column [KITA_ID_EXTERN]
+    // Kitafinder-Column [KIND_ID_EXTERN]
     private String childId;
     
     @NotNull
