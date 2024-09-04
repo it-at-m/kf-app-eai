@@ -54,7 +54,7 @@ public class Child   {
     // Kitafinder-Column [WOHNHAFT_BEI]
     private ChildAddress address;
 
-    @Schema(description = "Array mit Sorgeberechtigten für das Kind. Liste wird aus SB1, SB2 und ABW berechnet.")
+    @Schema(description = "Array mit Sorgeberechtigten für das Kind. Liste wird aus SB1 und SB2 berechnet.")
     private Collection<Parent> parents;
 
 }

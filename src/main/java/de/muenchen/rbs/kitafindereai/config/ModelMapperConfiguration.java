@@ -119,8 +119,6 @@ public class ModelMapperConfiguration {
                     context.getSource().getSb1Nachname());
             addParentIfExists(parents, ParentType.sb2, context.getSource().getSb2Vorname(),
                     context.getSource().getSb2Nachname());
-            addParentIfExists(parents, ParentType.abw, context.getSource().getAbwVorname(),
-                    context.getSource().getAbwNachname());
 
             return parents;
         };

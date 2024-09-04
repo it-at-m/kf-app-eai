@@ -104,10 +104,10 @@ class ModelMapperTest {
 
         Collection<Parent> parents = dest.getParents();
 
-        assertThat(parents).hasSize(3);
+        assertThat(parents).hasSize(2);
         assertThat(parents.stream().filter(p -> ParentType.sb1.equals(p.getParentType()))).hasSize(1);
         assertThat(parents.stream().filter(p -> ParentType.sb2.equals(p.getParentType()))).hasSize(1);
-        assertThat(parents.stream().filter(p -> ParentType.abw.equals(p.getParentType()))).hasSize(1);
+        assertThat(parents.stream().filter(p -> ParentType.abw.equals(p.getParentType()))).hasSize(0);
     }
 
     @Test
