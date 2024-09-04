@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>de.muenchen.rbs</groupId>
 	<artifactId>kita-finder-eai</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>kita-finder-eai</name>
 	<description>Enterprise Application Interface zwischen Kita-App und
 		Kita-Finder</description>
