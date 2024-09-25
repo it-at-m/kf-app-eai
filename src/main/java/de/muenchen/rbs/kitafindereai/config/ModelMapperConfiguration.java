@@ -58,7 +58,7 @@ public class ModelMapperConfiguration {
                 export.getDatensaetze().stream().forEach(kind -> {
                     // ignore children with a deleted contract
                     LocalDate careEnd = parseKitafinderDate(kind.getVerKuendigungZum());
-                    if(careEnd == null || careEnd.isBefore(LocalDate.now())) {
+                    if(careEnd == null || careEnd.isAfter(LocalDate.now())) {
                         String groupId = kind.getVerGruppeId();
                         
                         Optional<Group> group = groups.stream().filter(g -> Objects.equals(groupId, g.getGroupId())).findAny();
