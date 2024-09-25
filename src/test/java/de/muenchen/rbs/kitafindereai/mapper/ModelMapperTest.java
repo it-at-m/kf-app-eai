@@ -211,7 +211,7 @@ class ModelMapperTest {
         Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe id 1".equals(g.getGroupId())).findAny();
         assertThat(group1).isNotEmpty();
         assertThat(group1.get().getChildren().stream().map(k -> k.getFirstName()).toList())
-                .containsExactlyInAnyOrder(kind1.getKindVorname(), kind2.getKindVorname(), kind4.getKindVorname());
+                .containsExactlyInAnyOrder(kind1.getKindVorname(), kind3.getKindVorname(), kind4.getKindVorname());
     }
 
 }
