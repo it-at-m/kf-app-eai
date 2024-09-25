@@ -56,16 +56,20 @@ public class ModelMapperConfiguration {
                 // map groups and add children
                 List<Group> groups = new ArrayList<>();
                 export.getDatensaetze().stream().forEach(kind -> {
-                    String groupId = kind.getVerGruppeId();
-
-                    Optional<Group> group = groups.stream().filter(g -> Objects.equals(groupId, g.getGroupId())).findAny();
-                    if (group.isEmpty()) {
-                        // Group is not present yet.
-                        groups.add(new Group(groupId, kind.getVerGruppe(),
-                                new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
-                    } else {
-                        // Add to existing group
-                        group.get().getChildren().add(mapper.map(kind, Child.class));
+                    // ignore children with a deleted contract
+                    LocalDate careEnd = parseKitafinderDate(kind.getVerKuendigungZum());
+                    if(careEnd == null || careEnd.isBefore(LocalDate.now())) {
+                        String groupId = kind.getVerGruppeId();
+                        
+                        Optional<Group> group = groups.stream().filter(g -> Objects.equals(groupId, g.getGroupId())).findAny();
+                        if (group.isEmpty()) {
+                            // Group is not present yet.
+                            groups.add(new Group(groupId, kind.getVerGruppe(),
+                                    new ArrayList<>(List.of(mapper.map(kind, Child.class)))));
+                        } else {
+                            // Add to existing group
+                            group.get().getChildren().add(mapper.map(kind, Child.class));
+                        }
                     }
                 });
                 institute.setGroups(groups);
@@ -75,10 +79,7 @@ public class ModelMapperConfiguration {
         });
 
         Converter<String, LocalDate> dateConverter = context -> {
-            if (context.getSource() == null || context.getSource().length() == 0) {
-                return null;
-            }
-            return LocalDate.parse(context.getSource(), DATE_FORMATTER);
+            return parseKitafinderDate(context.getSource());
         };
 
         Converter<KitafinderKind, ChildAddress> adressConverter = context -> {
@@ -141,5 +142,12 @@ public class ModelMapperConfiguration {
         if (firstname == null || firstname.length() > 0 || lastname == null || lastname.length() > 0) {
             parentList.add(new Parent(type, firstname, lastname));
         }
+    }
+    
+    private LocalDate parseKitafinderDate(String dateString) {
+        if (dateString == null || dateString.length() == 0) {
+            return null;
+        }
+        return LocalDate.parse(dateString, DATE_FORMATTER);
     }
 }
