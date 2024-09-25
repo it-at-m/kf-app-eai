@@ -164,5 +164,54 @@ class ModelMapperTest {
         assertThat(group3.get().getChildren().stream().map(k -> k.getFirstName()).toList())
                 .containsExactlyInAnyOrder(kind4.getKindVorname());
     }
+    
+
+
+    @Test
+    void mapsKitafinderKindListIgnoresDeletedContract() {
+        KitafinderKind kind1 = new KitafinderKind();
+        kind1.setKitaIdExtern("KITA-ID");
+        kind1.setKitaKitaname("KITA-NAME");
+        kind1.setKindVorname("vorname Test 1");
+        kind1.setKindNachname("nachname Test 1");
+        kind1.setVerGruppeId("gruppe id 1");
+        kind1.setVerGruppe("gruppe Test 1");
+        KitafinderKind kind2 = new KitafinderKind();
+        kind2.setKitaIdExtern("KITA-ID");
+        kind2.setKitaKitaname("KITA-NAME");
+        kind2.setKindVorname("vorname Test 2");
+        kind2.setKindNachname("nachname Test 2");
+        kind2.setVerGruppeId("gruppe id 1");
+        kind2.setVerGruppe("gruppe Test 1");
+        kind2.setVerKuendigungZum("31.12.2009");
+        KitafinderKind kind3 = new KitafinderKind();
+        kind3.setKitaIdExtern("KITA-ID");
+        kind3.setKitaKitaname("KITA-NAME");
+        kind3.setKindVorname("vorname Test 3");
+        kind3.setKindNachname("nachname Test 3");
+        kind3.setVerGruppeId("gruppe id 1");
+        kind3.setVerGruppe("gruppe Test 1");
+        kind3.setVerKuendigungZum("31.12.2999");
+        KitafinderKind kind4 = new KitafinderKind();
+        kind4.setKitaIdExtern("KITA-ID");
+        kind4.setKitaKitaname("KITA-NAME");
+        kind4.setKindVorname("vorname Test 4");
+        kind4.setKindNachname("nachname Test 4");
+        kind4.setVerGruppeId("gruppe id 1");
+
+        KitafinderExport source = new KitafinderExport(0, null, null, 4, List.of(kind1, kind2, kind3, kind4), null);
+
+        Institute dest = mapper.map(source, Institute.class);
+
+        assertThat(dest.getInstituteId()).isEqualTo("KITA-ID");
+        assertThat(dest.getInstituteName()).isEqualTo("KITA-NAME");
+        System.out.println(dest.getGroups().toString());
+        assertThat(dest.getGroups()).hasSize(1);
+
+        Optional<Group> group1 = dest.getGroups().stream().filter(g -> "gruppe id 1".equals(g.getGroupId())).findAny();
+        assertThat(group1).isNotEmpty();
+        assertThat(group1.get().getChildren().stream().map(k -> k.getFirstName()).toList())
+                .containsExactlyInAnyOrder(kind1.getKindVorname(), kind2.getKindVorname(), kind4.getKindVorname());
+    }
 
 }
