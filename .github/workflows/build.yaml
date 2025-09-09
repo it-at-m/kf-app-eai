@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Advance Security Policy as Code
-        uses: advanced-security/policy-as-code@v2.7.2
+        uses: advanced-security/policy-as-code@v2.11.1
         with:
           policy: it-at-m/policy-as-code
           policy-path: default.yaml
@@ -35,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and test the application
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           
       - name: test
@@ -62,10 +62,10 @@ jobs:
     needs: build
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-artifacts
           path: ${{ env.MVN_BUILD_TARGET }}
@@ -92,7 +92,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.version }},enable=${{ github.event_name == 'workflow_dispatch' }}
 
       - name: Build and push untested Docker image to GHCR
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ${{ env.MVN_PROJECT_ROOT }}
           push: ${{ github.event.inputs.version != '' }}
