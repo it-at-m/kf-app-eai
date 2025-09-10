@@ -4,6 +4,7 @@
  */
 package de.muenchen.rbs.kitafindereai.adapter.kitaplaner;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,44 +32,43 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class KitaFinderApiAdapter {
 
-    @Value("${app.kitafinderAdapter.baseUrl}")
-    private String baseUrl;
+	@Value("${app.kitafinderAdapter.baseUrl}")
+	private String baseUrl;
 
-    @Value("${app.kitafinderAdapter.exportRelativeUrl}")
-    private String relativeUrl;
+	@Value("${app.kitafinderAdapter.exportRelativeUrl}")
+	private String relativeUrl;
 
-    @Autowired
-    private RestTemplate restTemplate;
+	@Autowired
+	private RestTemplate restTemplate;
 
-    public KitaFinderApiAdapter() {
-        super();
-    }
+	public KitaFinderApiAdapter() {
+		super();
+	}
 
-    public ResponseEntity<KitafinderExport> exportKitaData(@NotNull String traeger,
-            String kitaIdExtern, @NotNull String password) {
-        log.info("Requesting export from kita-planer for traeger={} and kitaIdExtern={}", traeger, kitaIdExtern);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	public ResponseEntity<KitafinderExport> exportKitaData(@NotNull String traeger, String kitaIdExtern,
+			@NotNull String password) {
+		log.info("Requesting export from kita-planer for traeger={} and kitaIdExtern={}", traeger, kitaIdExtern);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(new MediaType("application", "x-www-form-urlencoded", StandardCharsets.UTF_8));
 
-        // Spring can by default only handle MultiValueMap with MediaType.APPLICATION_FORM_URLENCODED
-        MultiValueMap<String, String> requestParameters = new LinkedMultiValueMap<>();
-        requestParameters.put("csv", List.of("n"));
-        requestParameters.put("benutzerId", List.of("kita-app-eai"));
-        requestParameters.put("traeger", List.of(traeger));
-        requestParameters.put("passwort", List.of(password));
-        if (kitaIdExtern != null) {
-            requestParameters.put("kitaIdExtern", List.of(kitaIdExtern));
-        }
+		// Spring can by default only handle MultiValueMap with
+		// MediaType.APPLICATION_FORM_URLENCODED
+		MultiValueMap<String, String> requestParameters = new LinkedMultiValueMap<>();
+		requestParameters.put("csv", List.of("n"));
+		requestParameters.put("benutzerId", List.of("kita-app-eai"));
+		requestParameters.put("traeger", List.of(traeger));
+		requestParameters.put("passwort", List.of(password));
+		if (kitaIdExtern != null) {
+			requestParameters.put("kitaIdExtern", List.of(kitaIdExtern));
+		}
 
-        HttpEntity<?> httpRequest = new HttpEntity<>(requestParameters, headers);
+		HttpEntity<?> httpRequest = new HttpEntity<>(requestParameters, headers);
 
-        log.debug("Starting export from kita-planer...");
-        ResponseEntity<KitafinderExport> response = restTemplate.exchange(baseUrl + relativeUrl,
-                HttpMethod.POST,
-                httpRequest,
-                KitafinderExport.class);
-        log.debug("Export from kita-planer done.");
-        return response;
-    }
+		log.debug("Starting export from kita-planer...");
+		ResponseEntity<KitafinderExport> response = restTemplate.exchange(baseUrl + relativeUrl, HttpMethod.POST,
+				httpRequest, KitafinderExport.class);
+		log.debug("Export from kita-planer done.");
+		return response;
+	}
 
 }
