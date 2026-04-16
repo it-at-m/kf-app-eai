@@ -153,7 +153,7 @@ public class SecurityConfiguration {
     @Profile("!no-security")
     @SecurityScheme(name = "ApiClient", type = SecuritySchemeType.OAUTH2, flows = @OAuthFlows(clientCredentials = @OAuthFlow(tokenUrl = "${app.security.token-url}", scopes = {
             @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_ROLES) })))
-    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, extensions = @Extension(properties = @ExtensionProperty(name = "tokenName", value = "id_token")), flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}", scopes = {
+    @SecurityScheme(name = "InternalLogin", type = SecuritySchemeType.OAUTH2, extensions = @Extension(properties = @ExtensionProperty(name = "tokenName", value = "access_token")), flows = @OAuthFlows(authorizationCode = @OAuthFlow(tokenUrl = "${app.security.token-url}", authorizationUrl = "${app.security.authorization-url}", refreshUrl = "${app.security.token-url}", scopes = {
             @OAuthScope(name = SCOPE_LHM_EXTENDED), @OAuthScope(name = SCOPE_OPENID) })))
     public class SpringdocConfig {
     }
