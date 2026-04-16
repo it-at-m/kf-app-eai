@@ -52,7 +52,7 @@ jobs:
         run: mvn install
         
       - name: Archive artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifacts
           path: ${{ env.MVN_BUILD_TARGET }}
@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
           path: ${{ env.MVN_BUILD_TARGET }}
